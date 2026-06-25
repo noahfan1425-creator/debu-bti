@@ -48,11 +48,25 @@
   }
   .bg-decor span{
     position:absolute;
-    opacity:0.22;
-    filter:drop-shadow(0 4px 6px rgba(0,0,0,0.08));
+    opacity:0.5;
     --r:0deg;
     transform:rotate(var(--r));
     will-change:transform;
+  }
+  .bg-sticker{
+    width:1.6em;
+    height:1.6em;
+    border-radius:50%;
+    background:var(--c, var(--accent));
+    border:0.1em solid var(--ink);
+    box-shadow:0.07em 0.09em 0 var(--ink);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .bg-sticker .emoji{
+    font-size:0.95em;
+    filter:saturate(1.5) drop-shadow(0 0.02em 0.02em rgba(0,0,0,0.3));
   }
   @keyframes floatA{
     0%,100%{transform:translate(0,0) rotate(var(--r));}
@@ -163,18 +177,97 @@
     box-shadow:0 0 0 var(--ink);
   }
   .progress-wrap{
+    position:relative;
+    height:44px;
+    margin:6px 0 22px;
+  }
+  .progress-track{
+    position:absolute;
+    left:0; right:0; top:24px;
+    height:12px;
     background:#eee;
     border:2px solid var(--ink);
     border-radius:10px;
-    height:12px;
     overflow:hidden;
-    margin-bottom:18px;
   }
   .progress-bar{
     height:100%;
     background:linear-gradient(90deg,var(--accent),var(--accent3),var(--accent2));
     width:0%;
-    transition:width .3s;
+    transition:width .4s ease;
+  }
+  .progress-dots{
+    position:absolute;
+    left:6px; right:6px; top:24px; height:12px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    pointer-events:none;
+  }
+  .progress-dots span{
+    font-size:0.7em;
+    line-height:1;
+    transition:opacity .2s, transform .2s;
+  }
+  .progress-dots span.eaten{
+    opacity:0;
+    transform:scale(0.2);
+  }
+  .progress-char{
+    position:absolute;
+    top:-6px;
+    left:0%;
+    width:42px;
+    height:42px;
+    transform:translate(-50%,0);
+    transition:left .4s ease;
+  }
+  .char-head{
+    position:relative;
+    width:100%;
+    height:100%;
+    background:radial-gradient(circle at 35% 30%, #ffe9c7, #ffc98a);
+    border:3px solid var(--ink);
+    border-radius:50%;
+  }
+  .progress-char.biting .char-head{
+    animation:biteHead .35s ease;
+  }
+  .char-eye{
+    position:absolute;
+    top:13px; left:11px;
+    width:4px; height:4px;
+    background:var(--ink);
+    border-radius:50%;
+  }
+  .char-cheek{
+    position:absolute;
+    top:20px; left:5px;
+    width:8px; height:5px;
+    background:#ff8fa3;
+    opacity:0.6;
+    border-radius:50%;
+  }
+  .char-mouth{
+    position:absolute;
+    top:16px; right:-3px;
+    width:13px;
+    height:12px;
+    background:var(--ink);
+    border-radius:0 60% 60% 0;
+  }
+  .progress-char.biting .char-mouth{
+    animation:biteMouth .35s ease;
+  }
+  @keyframes biteHead{
+    0%{transform:rotate(0deg);}
+    45%{transform:rotate(-10deg) translateX(2px);}
+    100%{transform:rotate(0deg);}
+  }
+  @keyframes biteMouth{
+    0%{height:12px; top:16px;}
+    45%{height:3px; top:21px;}
+    100%{height:12px; top:16px;}
   }
   .q-count{
     text-align:right;
@@ -425,20 +518,48 @@
 </head>
 <body>
 <div class="bg-decor" aria-hidden="true">
-  <span style="top:4%; left:6%; font-size:2.6em; --r:-12deg; animation:floatA 17s ease-in-out infinite; animation-delay:-2s;">🍔</span>
-  <span style="top:10%; left:80%; font-size:3.2em; --r:15deg; animation:floatB 21s ease-in-out infinite; animation-delay:-9s;">🍕</span>
-  <span style="top:22%; left:32%; font-size:2.2em; --r:8deg; animation:floatC 15s ease-in-out infinite; animation-delay:-4s;">🍩</span>
-  <span style="top:6%; left:48%; font-size:2.4em; --r:-6deg; animation:floatD 19s ease-in-out infinite; animation-delay:-11s;">🍟</span>
-  <span style="top:34%; left:90%; font-size:2.8em; --r:-10deg; animation:floatA 23s ease-in-out infinite; animation-delay:-6s;">🍗</span>
-  <span style="top:46%; left:4%; font-size:3em; --r:10deg; animation:floatB 16s ease-in-out infinite; animation-delay:-1s;">🍰</span>
-  <span style="top:58%; left:85%; font-size:2.3em; --r:18deg; animation:floatC 20s ease-in-out infinite; animation-delay:-13s;">🧀</span>
-  <span style="top:62%; left:20%; font-size:2.6em; --r:-15deg; animation:floatD 18s ease-in-out infinite; animation-delay:-7s;">🍜</span>
-  <span style="top:72%; left:55%; font-size:2.2em; --r:6deg; animation:floatA 22s ease-in-out infinite; animation-delay:-15s;">🍪</span>
-  <span style="top:80%; left:8%; font-size:2.8em; --r:-8deg; animation:floatB 14s ease-in-out infinite; animation-delay:-3s;">🍫</span>
-  <span style="top:84%; left:75%; font-size:3em; --r:12deg; animation:floatC 24s ease-in-out infinite; animation-delay:-10s;">🍦</span>
-  <span style="top:90%; left:40%; font-size:2.4em; --r:-5deg; animation:floatD 17s ease-in-out infinite; animation-delay:-5s;">🥓</span>
-  <span style="top:14%; left:65%; font-size:2.1em; --r:20deg; animation:floatA 19s ease-in-out infinite; animation-delay:-8s;">🧁</span>
-  <span style="top:50%; left:48%; font-size:2.6em; --r:-18deg; animation:floatB 25s ease-in-out infinite; animation-delay:-12s;">🍿</span>
+  <span style="top:4%; left:6%; font-size:2.6em; --r:-12deg; animation:floatA 17s ease-in-out infinite; animation-delay:-2s;">
+    <div class="bg-sticker" style="--c:var(--accent)"><span class="emoji">🍔</span></div>
+  </span>
+  <span style="top:10%; left:80%; font-size:3.2em; --r:15deg; animation:floatB 21s ease-in-out infinite; animation-delay:-9s;">
+    <div class="bg-sticker" style="--c:var(--accent3)"><span class="emoji">🍕</span></div>
+  </span>
+  <span style="top:22%; left:32%; font-size:2.2em; --r:8deg; animation:floatC 15s ease-in-out infinite; animation-delay:-4s;">
+    <div class="bg-sticker" style="--c:var(--bg3)"><span class="emoji">🍩</span></div>
+  </span>
+  <span style="top:6%; left:48%; font-size:2.4em; --r:-6deg; animation:floatD 19s ease-in-out infinite; animation-delay:-11s;">
+    <div class="bg-sticker" style="--c:var(--accent2)"><span class="emoji">🍟</span></div>
+  </span>
+  <span style="top:34%; left:90%; font-size:2.8em; --r:-10deg; animation:floatA 23s ease-in-out infinite; animation-delay:-6s;">
+    <div class="bg-sticker" style="--c:var(--bg2)"><span class="emoji">🍗</span></div>
+  </span>
+  <span style="top:46%; left:4%; font-size:3em; --r:10deg; animation:floatB 16s ease-in-out infinite; animation-delay:-1s;">
+    <div class="bg-sticker" style="--c:var(--bg1)"><span class="emoji">🍰</span></div>
+  </span>
+  <span style="top:58%; left:85%; font-size:2.3em; --r:18deg; animation:floatC 20s ease-in-out infinite; animation-delay:-13s;">
+    <div class="bg-sticker" style="--c:var(--accent3)"><span class="emoji">🧀</span></div>
+  </span>
+  <span style="top:62%; left:20%; font-size:2.6em; --r:-15deg; animation:floatD 18s ease-in-out infinite; animation-delay:-7s;">
+    <div class="bg-sticker" style="--c:var(--accent)"><span class="emoji">🍜</span></div>
+  </span>
+  <span style="top:72%; left:55%; font-size:2.2em; --r:6deg; animation:floatA 22s ease-in-out infinite; animation-delay:-15s;">
+    <div class="bg-sticker" style="--c:var(--bg3)"><span class="emoji">🍪</span></div>
+  </span>
+  <span style="top:80%; left:8%; font-size:2.8em; --r:-8deg; animation:floatB 14s ease-in-out infinite; animation-delay:-3s;">
+    <div class="bg-sticker" style="--c:var(--accent2)"><span class="emoji">🍫</span></div>
+  </span>
+  <span style="top:84%; left:75%; font-size:3em; --r:12deg; animation:floatC 24s ease-in-out infinite; animation-delay:-10s;">
+    <div class="bg-sticker" style="--c:var(--bg2)"><span class="emoji">🍦</span></div>
+  </span>
+  <span style="top:90%; left:40%; font-size:2.4em; --r:-5deg; animation:floatD 17s ease-in-out infinite; animation-delay:-5s;">
+    <div class="bg-sticker" style="--c:var(--accent3)"><span class="emoji">🥓</span></div>
+  </span>
+  <span style="top:14%; left:65%; font-size:2.1em; --r:20deg; animation:floatA 19s ease-in-out infinite; animation-delay:-8s;">
+    <div class="bg-sticker" style="--c:var(--bg1)"><span class="emoji">🧁</span></div>
+  </span>
+  <span style="top:50%; left:48%; font-size:2.6em; --r:-18deg; animation:floatB 25s ease-in-out infinite; animation-delay:-12s;">
+    <div class="bg-sticker" style="--c:var(--accent)"><span class="emoji">🍿</span></div>
+  </span>
 </div>
 <div class="container">
 
@@ -468,7 +589,17 @@
 
   <div class="screen" id="screen-quiz">
     <div class="q-count" id="q-count"></div>
-    <div class="progress-wrap"><div class="progress-bar" id="progress-bar"></div></div>
+    <div class="progress-wrap">
+      <div class="progress-track"><div class="progress-bar" id="progress-bar"></div></div>
+      <div class="progress-dots" id="progress-dots"></div>
+      <div class="progress-char" id="progress-char">
+        <div class="char-head">
+          <div class="char-cheek"></div>
+          <div class="char-eye"></div>
+          <div class="char-mouth"></div>
+        </div>
+      </div>
+    </div>
     <div class="q-text" id="q-text"></div>
     <div id="choices"></div>
   </div>
@@ -660,10 +791,21 @@ function shuffle(arr){
   return a;
 }
 
+const foodPellets = ["🍙","🍕","🍔","🍰","🍩","🍟","🍗","🍫","🍪","🍦"];
+
 function startQuiz(){
   order = questions.map((q,i)=>i);
   current = 0;
   scores = {M:0,L:0,S:0,N:0,G:0,B:0,P:0,I:0};
+  const dotsEl = document.getElementById("progress-dots");
+  dotsEl.innerHTML = "";
+  questions.forEach((q,i)=>{
+    const dot = document.createElement("span");
+    dot.textContent = foodPellets[i % foodPellets.length];
+    dotsEl.appendChild(dot);
+  });
+  document.getElementById("progress-char").style.left = "0%";
+  document.getElementById("progress-char").classList.remove("biting");
   show("screen-quiz");
   renderQuestion();
 }
@@ -687,12 +829,26 @@ function renderQuestion(){
 function answer(q, opt){
   const letter = opt.dir === "a" ? q.a : q.b;
   scores[letter] += opt.weight;
+
+  Array.from(document.getElementById("choices").children).forEach(btn=>{
+    btn.disabled = true;
+    btn.style.pointerEvents = "none";
+  });
+
+  const dots = document.getElementById("progress-dots").children;
+  if(dots[current]) dots[current].classList.add("eaten");
+  const charEl = document.getElementById("progress-char");
+  charEl.style.left = ((current+1)/questions.length*100) + "%";
+  charEl.classList.remove("biting");
+  void charEl.offsetWidth;
+  charEl.classList.add("biting");
+
   current++;
   if(current >= questions.length){
     document.getElementById("progress-bar").style.width = "100%";
-    setTimeout(showResult, 200);
+    setTimeout(showResult, 350);
   } else {
-    renderQuestion();
+    setTimeout(renderQuestion, 250);
   }
 }
 
