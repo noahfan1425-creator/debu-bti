@@ -6,7 +6,7 @@
 <title>デブBTI - あなたはどんなタイプのデブ？</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Yusei+Magic&family=Mochiy+Pop+One&family=M+PLUS+Rounded+1c:wght@500;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Yusei+Magic&family=Mochiy+Pop+One&family=M+PLUS+Rounded+1c:wght@500;700;800&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg1:#ff6fa5;
@@ -201,10 +201,16 @@
     overflow:hidden;
   }
   .container.building-mode{
-    border-radius:0;
-    border-width:4px;
-    box-shadow:0 14px 0 rgba(0,0,0,0.12), 0 18px 22px rgba(0,0,0,0.3);
-    background:linear-gradient(90deg, rgba(0,0,0,0.07), transparent 7%, transparent 93%, rgba(0,0,0,0.07)), var(--card);
+    position:fixed;
+    left:50%;
+    bottom:7%;
+    transform:translateX(-50%);
+    width:90%;
+    padding:0;
+    background:none;
+    border:none;
+    box-shadow:none;
+    z-index:2;
   }
   h1{
     font-family:"Mochiy Pop One",sans-serif;
@@ -226,51 +232,303 @@
     25%{transform:rotate(-2deg);}
     75%{transform:rotate(2deg);}
   }
-  .shop-front{
+  #shop2d-fullscreen{
+    position:fixed;
+    inset:0;
+    z-index:0;
+    background:linear-gradient(180deg,#3d9be0 0%,#6ec3ee 40%,#bfe6f7 75%,#e3f4fb 100%);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+  }
+  #shop2d-fullscreen.active{display:flex;}
+  .shop2d-scene{
     position:relative;
-    margin:-32px -28px 18px;
+    width:min(80vw,460px);
+  }
+  @keyframes suckIn2D{
+    0%{transform:scale(1); opacity:1;}
+    40%{transform:scale(1.8); opacity:1;}
+    100%{transform:scale(16); opacity:0;}
+  }
+  .shop2d-scene.sucking{
+    animation:suckIn2D .6s cubic-bezier(.55,0,1,0.45) forwards;
+  }
+  .shop-front-2d{
+    position:relative;
     background:#fff;
+    border:4px solid var(--ink);
+    box-shadow:0 14px 0 rgba(0,0,0,0.12), 0 18px 22px rgba(0,0,0,0.3);
   }
-  #shop3d-container{
+  .roof-peak{
     position:relative;
-    width:100%;
-    aspect-ratio:4/3;
-    cursor:pointer;
-    background:linear-gradient(180deg,#bfe3f5,#eaf7ff);
-    border-bottom:4px solid var(--ink);
-    overflow:hidden;
+    height:64px;
+    background:#f7f1e6;
   }
-  #shop3d-canvas{
-    display:block;
-    width:100%;
-    height:100%;
-  }
-  #shop3d-hint{
+  .roof-triangle{
     position:absolute;
-    bottom:8px;
+    left:4%; right:4%; top:0; bottom:0;
+  }
+  .roof-triangle::before, .roof-triangle::after{
+    content:"";
+    position:absolute;
+    clip-path:polygon(50% 0%, 100% 100%, 0% 100%);
+  }
+  .roof-triangle::before{
+    inset:-4px;
+    background:var(--ink);
+  }
+  .roof-triangle::after{
+    inset:0;
+    background-color:#cf7f4e;
+    background-image:repeating-radial-gradient(circle at 8px -5px, transparent 0 5px, rgba(0,0,0,0.14) 5px 6px);
+    background-size:16px 12px;
+  }
+  .roof-trim{
+    position:relative;
+    height:9px;
+    background:#f7f1e6;
+    border-bottom:3px solid var(--ink);
+  }
+  .roof-trim::before, .roof-trim::after{
+    content:"";
+    position:absolute;
+    left:0; right:0;
+    height:2px;
+    background:#c0392b;
+  }
+  .roof-trim::before{top:1px;}
+  .roof-trim::after{top:5px;}
+  .wall-top{
+    position:relative;
+    background:#f7f1e6;
+    border-bottom:2px solid var(--ink);
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:8px 0 10px 18px;
+  }
+  .arrow-logo{
+    position:relative;
+    width:46px;
+    height:28px;
+    flex-shrink:0;
+  }
+  .arrow-logo::before, .arrow-logo::after{
+    content:"";
+    position:absolute;
+    clip-path:polygon(0% 0%, 62% 0%, 100% 50%, 62% 100%, 0% 100%);
+  }
+  .arrow-logo::before{
+    inset:-3px;
+    background:var(--ink);
+  }
+  .arrow-logo::after{
+    inset:0;
+    background:#ffce00;
+  }
+  .wall-top .sign-text{
+    font-family:"Mochiy Pop One",sans-serif;
+    font-size:1.3em;
+    color:#d62828;
+    text-shadow:1px 1px 0 #fff;
+    letter-spacing:1px;
+    margin-left:4px;
+  }
+  .awning{
+    height:18px;
+    background:#e8546f;
+    border-top:2px solid var(--ink);
+    border-bottom:2px solid var(--ink);
+  }
+  .awning-valance{
+    height:8px;
+    background:repeating-linear-gradient(45deg, #d62828 0 6px, #fff 6px 12px);
+    border-bottom:3px solid var(--ink);
+  }
+  #shop-doors{
+    position:relative;
+    height:118px;
+    background:#cfeaf2;
+    display:flex;
+    align-items:flex-end;
+    justify-content:center;
+    gap:3px;
+    padding-top:8px;
+    perspective:500px;
+    overflow:hidden;
+    border-bottom:3px solid var(--ink);
+    cursor:pointer;
+  }
+  .storefront-window{
+    flex:1;
+    align-self:stretch;
+    background:linear-gradient(180deg,#dff3fa,#bfe3f0);
+    border:3px solid var(--ink);
+    margin:0 1px;
+    min-width:10px;
+  }
+  #shop-doors:hover .door{
+    filter:brightness(1.05);
+  }
+  #shop-doors:not(.open):hover .door-l{transform:rotateY(-8deg);}
+  #shop-doors:not(.open):hover .door-r{transform:rotateY(8deg);}
+  .door-glow{
+    position:absolute;
+    inset:0;
+    background:radial-gradient(circle at 50% 35%, rgba(255,221,128,0.95), rgba(255,221,128,0) 65%);
+    opacity:0;
+    transition:opacity .5s ease .35s;
+    pointer-events:none;
+  }
+  #shop-doors.open .door-glow{opacity:1;}
+  .open-sign{
+    position:absolute;
+    top:14px;
     left:50%;
-    transform:translateX(-50%);
+    transform:translateX(-50%) rotate(-3deg);
     background:#d62828;
     color:#fff;
     font-weight:800;
     font-size:0.7em;
     padding:3px 10px;
-    border-radius:999px;
+    border-radius:4px;
     border:2px solid var(--ink);
+    z-index:3;
+    letter-spacing:1px;
+  }
+  .door{
+    width:58px;
+    height:98px;
+    background:linear-gradient(180deg,#dff3fa,#bfe3f0);
+    border:4px solid #d62828;
+    border-radius:5px 5px 0 0;
+    position:relative;
+    transition:transform .9s cubic-bezier(.65,-0.2,.35,1.2);
+    transform-style:preserve-3d;
+    z-index:2;
+  }
+  .door-l{transform-origin:left center;}
+  .door-r{transform-origin:right center;}
+  .door .handle{
+    position:absolute;
+    top:50%;
+    width:5px;
+    height:22px;
+    background:#d62828;
+    border-radius:3px;
+  }
+  .door-l .handle{right:6px;}
+  .door-r .handle{left:6px;}
+  #shop-doors.open .door-l{transform:rotateY(-112deg);}
+  #shop-doors.open .door-r{transform:rotateY(112deg);}
+  .wainscot{
+    position:relative;
+    height:16px;
+    background-color:#b8916a;
+    background-image:repeating-linear-gradient(0deg, rgba(0,0,0,0.18) 0 2px, transparent 2px 8px);
+    border-bottom:3px solid var(--ink);
+  }
+  .bollard{
+    position:absolute;
+    bottom:2px;
+    width:7px;
+    height:18px;
+    background:#fff;
+    border:2px solid var(--ink);
+    border-radius:3px;
+  }
+  .bollard::after{
+    content:"";
+    position:absolute;
+    top:-2px; left:-2px; right:-2px;
+    height:5px;
+    background:#d62828;
+    border-radius:3px 3px 0 0;
+    border-bottom:2px solid var(--ink);
+  }
+  .curb-2d{
+    height:12px;
+    background:repeating-linear-gradient(45deg, #d62828 0 8px, #fff 8px 16px);
+  }
+  .floor-2d{
+    height:18px;
+    background-image:
+      linear-gradient(45deg, #2b2b2b 25%, transparent 25%, transparent 75%, #2b2b2b 75%, #2b2b2b),
+      linear-gradient(45deg, #2b2b2b 25%, transparent 25%, transparent 75%, #2b2b2b 75%, #2b2b2b);
+    background-size:18px 18px;
+    background-position:0 0, 9px 9px;
+    background-color:#fff;
+    border-bottom:3px solid var(--ink);
+  }
+  .palm-2d{
+    position:absolute;
+    right:-16px;
+    bottom:30px;
+    width:18px;
+    z-index:4;
     pointer-events:none;
-    animation:hintBounce 1.6s ease-in-out infinite;
   }
-  @keyframes hintBounce{
-    0%,100%{transform:translateX(-50%) translateY(0);}
-    50%{transform:translateX(-50%) translateY(-4px);}
+  .palm-2d .trunk{
+    position:absolute;
+    bottom:0;
+    left:4px;
+    width:12px;
+    height:140px;
+    background:linear-gradient(90deg,#8a6038,#6b4423);
+    border:2px solid var(--ink);
+    border-radius:3px;
   }
-  @keyframes suckIn{
-    0%{transform:scale(1); opacity:1; filter:blur(0);}
-    40%{transform:scale(1.8); opacity:1; filter:blur(0);}
-    100%{transform:scale(16); opacity:0; filter:blur(3px);}
+  .palm-2d .leaf{
+    position:absolute;
+    bottom:128px;
+    width:80px;
+    height:34px;
+    background:#3f8b4c;
+    border:2px solid var(--ink);
+    border-radius:50% 50% 50% 0;
   }
-  .container.sucking{
-    animation:suckIn .6s cubic-bezier(.55,0,1,0.45) forwards;
+  .nobori-2d{
+    position:absolute;
+    left:-42px;
+    bottom:12px;
+    width:50px;
+    z-index:4;
+  }
+  .nobori-2d .pole{
+    position:absolute;
+    bottom:0;
+    left:1px;
+    width:4px;
+    height:184px;
+    background:#6b4423;
+    border:1px solid var(--ink);
+  }
+  .nobori-2d .flag{
+    position:absolute;
+    bottom:88px;
+    left:7px;
+    width:40px;
+    height:150px;
+    background:#d62828;
+    border:3px solid var(--ink);
+    color:#fff;
+    font-weight:800;
+    font-size:0.85em;
+    letter-spacing:4px;
+    text-align:center;
+    padding:10px 3px;
+    writing-mode:vertical-rl;
+    transform-origin:left center;
+    animation:noboriWave 2.4s ease-in-out infinite;
+    cursor:pointer;
+  }
+  @keyframes noboriWave{
+    0%,100%{transform:skewY(0deg) scaleX(1);}
+    25%{transform:skewY(2deg) scaleX(0.97);}
+    50%{transform:skewY(-1deg) scaleX(1.02);}
+    75%{transform:skewY(1.5deg) scaleX(0.98);}
   }
   #flash-overlay{
     position:fixed;
@@ -364,13 +622,16 @@
     font-size:1.1em;
     font-weight:800;
     color:#a8231b;
-    margin:18px 0 2px;
+    margin:0 0 2px;
+    text-shadow:0 0 6px #fff, 0 0 6px #fff, 0 1px 0 #fff;
   }
   .shop-tagline-sub{
     text-align:center;
     font-size:0.9em;
-    opacity:0.75;
-    margin:0 0 22px;
+    font-weight:700;
+    color:var(--text);
+    margin:0;
+    text-shadow:0 0 6px #fff, 0 0 6px #fff;
   }
   button.primary{
     display:block;
@@ -674,64 +935,125 @@
     transform:translate(4px,5px);
     box-shadow:0 0 0 var(--ink);
   }
+  #screen-alltypes{
+    font-family:"Courier Prime",monospace;
+    color:#2d1b0e;
+    background:#fffdf6;
+    margin:-32px -28px;
+    padding:26px 24px 18px;
+    position:relative;
+  }
+  #screen-alltypes::before, #screen-alltypes::after{
+    content:"";
+    position:absolute;
+    left:0; right:0;
+    height:10px;
+    background:
+      linear-gradient(135deg, transparent 50%, rgba(45,27,14,0.2) 50%),
+      linear-gradient(-135deg, transparent 50%, rgba(45,27,14,0.2) 50%);
+    background-size:14px 10px;
+    background-repeat:repeat-x;
+  }
+  #screen-alltypes::before{top:-1px;}
+  #screen-alltypes::after{bottom:-1px; transform:scaleY(-1);}
   .back-link{
     display:inline-block;
-    margin-bottom:14px;
+    margin-bottom:10px;
     font-size:0.85em;
-    color:#fff;
-    background:var(--accent3);
-    padding:5px 14px;
-    border:2px solid var(--ink);
-    border-radius:999px;
+    color:#2d1b0e;
+    background:none;
+    padding:0;
+    border:none;
+    border-bottom:1px dashed #2d1b0e;
+    border-radius:0;
     cursor:pointer;
-    font-weight:800;
+    font-weight:700;
+    font-family:"Courier Prime",monospace;
   }
-  .type-card{
-    display:flex;
-    gap:12px;
-    align-items:flex-start;
-    border:3px solid var(--ink);
-    border-radius:16px;
-    padding:14px;
-    margin-bottom:12px;
-    background:#fffaf0;
-    box-shadow:3px 4px 0 var(--ink);
+  .receipt-head{
+    text-align:center;
+    border-bottom:2px dashed #2d1b0e;
+    padding-bottom:10px;
+    margin-bottom:10px;
   }
-  .type-card .tc-emoji{
-    font-size:1.8em;
-    line-height:1;
+  .receipt-head .r-store{
+    font-family:"Mochiy Pop One",sans-serif;
+    font-size:1.3em;
+    color:#2d1b0e;
   }
-  .type-card .tc-body{flex:1;}
-  .type-card .tc-code{
-    font-size:0.75em;
+  .receipt-head .r-sub{
+    font-size:0.8em;
     letter-spacing:2px;
-    opacity:0.55;
+    margin-top:4px;
+  }
+  .receipt-meta{
+    font-size:0.72em;
+    line-height:1.6;
+    border-bottom:1px dashed #2d1b0e;
+    padding-bottom:10px;
+    margin-bottom:8px;
+    opacity:0.85;
+  }
+  .receipt-meta div{display:flex; justify-content:space-between;}
+  .type-card{
+    border-bottom:1px dashed #2d1b0e;
+    padding:10px 0;
+  }
+  .type-card .tc-row1{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    gap:8px;
+  }
+  .type-card .tc-code{
+    font-size:0.72em;
+    letter-spacing:1px;
+    opacity:0.65;
+    flex-shrink:0;
   }
   .type-card .tc-name{
-    font-weight:bold;
-    color:var(--accent);
-    font-size:1.05em;
-    margin:1px 0 2px;
+    font-weight:700;
+    font-size:0.98em;
+    margin:2px 0 3px;
   }
+  .type-card .tc-name .tc-emoji{margin-right:5px;}
   .type-card .tc-catch{
-    font-size:0.8em;
-    font-weight:bold;
-    color:var(--accent2);
-    margin-bottom:6px;
+    font-size:0.78em;
+    font-style:italic;
+    opacity:0.8;
+    margin-bottom:5px;
   }
   .type-card .tc-desc{
-    font-size:0.85em;
-    line-height:1.5;
+    font-size:0.78em;
+    line-height:1.55;
     margin-bottom:6px;
   }
   .type-card .tc-food{
-    font-size:0.82em;
-    font-weight:700;
-    background:#ffeef0;
-    border:2px solid var(--accent);
-    border-radius:999px;
-    padding:5px 12px;
-    display:inline-block;
+    display:flex;
+    justify-content:space-between;
+    font-size:0.8em;
+    border-top:1px dotted #2d1b0e;
+    padding-top:5px;
+  }
+  .type-card .tc-food .tc-qty{opacity:0.6;}
+  .receipt-foot{
+    text-align:center;
+    margin-top:14px;
+  }
+  .receipt-barcode{
+    height:34px;
+    margin:10px auto 6px;
+    width:80%;
+    background:repeating-linear-gradient(90deg, #2d1b0e 0 2px, transparent 2px 5px, #2d1b0e 5px 6px, transparent 6px 10px);
+  }
+  .receipt-foot .r-thanks{
+    font-size:0.85em;
+    letter-spacing:3px;
+    margin-bottom:2px;
+  }
+  .receipt-foot .r-id{
+    font-size:0.65em;
+    opacity:0.6;
   }
 </style>
 </head>
@@ -773,6 +1095,47 @@
     <div class="line" style="left:56%;"></div>
     <div class="line" style="left:73%;"></div>
     <div class="line" style="left:90%;"></div>
+  </div>
+</div>
+<div id="shop2d-fullscreen" class="active" aria-label="ドアを開けて入店する">
+  <div class="shop2d-scene">
+    <div class="nobori-2d">
+      <div class="pole"></div>
+      <div class="flag" onclick="enterShop()">ドアをクリック</div>
+    </div>
+    <div class="shop-front-2d">
+      <div class="roof-peak"><div class="roof-triangle"></div></div>
+      <div class="roof-trim"></div>
+      <div class="wall-top">
+        <div class="arrow-logo"></div>
+        <span class="sign-text">デブBTI</span>
+      </div>
+      <div class="awning"></div>
+      <div class="awning-valance"></div>
+      <div id="shop-doors" onclick="enterShop()" role="button" aria-label="ドアを開けて入店する">
+        <div class="storefront-window"></div>
+        <div class="door-glow"></div>
+        <div class="open-sign">OPEN</div>
+        <div class="door door-l"><span class="handle"></span></div>
+        <div class="door door-r"><span class="handle"></span></div>
+        <div class="storefront-window"></div>
+      </div>
+      <div class="wainscot">
+        <div class="bollard" style="left:26%;"></div>
+        <div class="bollard" style="left:38%;"></div>
+        <div class="bollard" style="left:62%;"></div>
+      </div>
+      <div class="curb-2d"></div>
+      <div class="floor-2d"></div>
+    </div>
+    <div class="palm-2d">
+      <div class="trunk"></div>
+      <div class="leaf" style="transform:rotate(-55deg); left:-36px;"></div>
+      <div class="leaf" style="transform:rotate(-20deg); left:-24px;"></div>
+      <div class="leaf" style="transform:rotate(15deg); left:-10px;"></div>
+      <div class="leaf" style="transform:rotate(48deg); left:2px;"></div>
+      <div class="leaf" style="transform:rotate(80deg); left:10px;"></div>
+    </div>
   </div>
 </div>
 <div class="bg-decor" aria-hidden="true">
@@ -822,14 +1185,8 @@
 <div class="container building-mode">
 
   <div class="screen active" id="screen-title">
-    <div class="shop-front shop-front-title">
-      <div id="shop3d-container" onclick="enterShop()" role="button" aria-label="ドアを開けて入店する">
-        <canvas id="shop3d-canvas"></canvas>
-        <div id="shop3d-hint">👉 ドアをクリック</div>
-      </div>
-    </div>
     <p class="shop-tagline">高カロリー診断専門店</p>
-    <p class="shop-tagline-sub">3Dのお店をクリックして入店しよう</p>
+    <p class="shop-tagline-sub">デブBTI</p>
   </div>
 
   <div class="screen" id="screen-intro">
@@ -849,11 +1206,22 @@
   </div>
 
   <div class="screen" id="screen-alltypes">
-    <span class="back-link" onclick="show('screen-intro')">◀ 戻る</span>
-    <h1 style="font-size:1.3em;">16タイプ一覧</h1>
-    <p class="subtitle">すべてのデブタイプとおすすめメシ</p>
+    <span class="back-link" onclick="show('screen-intro')">✂ 戻る</span>
+    <div class="receipt-head">
+      <div class="r-store">デブBTI</div>
+      <div class="r-sub">* 16 TYPES RECEIPT *</div>
+    </div>
+    <div class="receipt-meta">
+      <div><span>ITEMS</span><span>16</span></div>
+      <div><span>DIAGNOSIS</span><span>4-AXIS / 20Q</span></div>
+    </div>
     <div id="alltypes-list"></div>
-    <button class="primary" onclick="startQuiz()">診断をはじめる ▶</button>
+    <div class="receipt-foot">
+      <div class="receipt-barcode"></div>
+      <div class="r-thanks">ありがとうございました</div>
+      <div class="r-id">No. デブ-0000016</div>
+    </div>
+    <button class="primary" onclick="startQuiz()" style="margin-top:18px;">診断をはじめる ▶</button>
   </div>
 
   <div class="screen" id="screen-quiz">
@@ -901,7 +1269,6 @@
 
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 // 4軸: 食欲(M/L) 間食(S/N) こだわり(G/B) 計画性(P/I)
 const questions = [
@@ -1063,260 +1430,28 @@ function shuffle(arr){
 
 const foodPellets = ["🍙","🍕","🍔","🍰","🍩","🍟","🍗","🍫","🍪","🍦"];
 
-// ---------- 3D shop scene (Three.js) ----------
-let shop3d = null;
-
-function makeSignTexture(){
-  const cv = document.createElement("canvas");
-  cv.width = 512; cv.height = 220;
-  const ctx = cv.getContext("2d");
-  ctx.clearRect(0,0,cv.width,cv.height);
-  // yellow arrow chevron
-  const ax=20, ay=50, aw=170, ah=110;
-  function arrowPath(){
-    ctx.beginPath();
-    ctx.moveTo(ax, ay);
-    ctx.lineTo(ax+aw*0.62, ay);
-    ctx.lineTo(ax+aw, ay+ah/2);
-    ctx.lineTo(ax+aw*0.62, ay+ah);
-    ctx.lineTo(ax, ay+ah);
-    ctx.closePath();
-  }
-  arrowPath();
-  ctx.fillStyle = "#2d1b0e";
-  ctx.save(); ctx.translate(0,0); ctx.restore();
-  ctx.lineWidth = 14;
-  ctx.strokeStyle = "#2d1b0e";
-  ctx.stroke();
-  ctx.fillStyle = "#ffce00";
-  ctx.fill();
-  // text
-  ctx.font = "bold 76px 'Mochiy Pop One','Hiragino Maru Gothic ProN',sans-serif";
-  ctx.fillStyle = "#d62828";
-  ctx.textBaseline = "middle";
-  ctx.lineWidth = 6;
-  ctx.strokeStyle = "#fff";
-  ctx.strokeText("デブBTI", ax+aw+24, ay+ah/2+38);
-  ctx.fillText("デブBTI", ax+aw+24, ay+ah/2+38);
-  const tex = new THREE.CanvasTexture(cv);
-  tex.needsUpdate = true;
-  return tex;
-}
-
-function initShop3D(){
-  const canvas = document.getElementById("shop3d-container") && document.getElementById("shop3d-canvas");
-  const container = document.getElementById("shop3d-container");
-  if(!canvas || !container || typeof THREE === "undefined") return;
-
-  const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(30, container.clientWidth/container.clientHeight, 0.1, 100);
-  camera.position.set(0.6, 2.3, 8.6);
-  camera.lookAt(0, 1.3, 0);
-
-  const renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true});
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-  renderer.setSize(container.clientWidth, container.clientHeight, false);
-  renderer.shadowMap.enabled = true;
-
-  scene.add(new THREE.HemisphereLight(0xbfe3f5, 0x55483a, 1.0));
-  const sun = new THREE.DirectionalLight(0xfff3da, 1.15);
-  sun.position.set(4, 7, 6);
-  sun.castShadow = true;
-  sun.shadow.mapSize.set(1024,1024);
-  sun.shadow.camera.left = -8; sun.shadow.camera.right = 8;
-  sun.shadow.camera.top = 8; sun.shadow.camera.bottom = -8;
-  scene.add(sun);
-
-  const ground = new THREE.Mesh(
-    new THREE.PlaneGeometry(40,40),
-    new THREE.MeshStandardMaterial({color:0x8b8f97, roughness:1})
-  );
-  ground.rotation.x = -Math.PI/2;
-  ground.receiveShadow = true;
-  scene.add(ground);
-  // parking line
-  const line = new THREE.Mesh(new THREE.PlaneGeometry(0.3,2.4), new THREE.MeshStandardMaterial({color:0xfff3c4}));
-  line.rotation.x = -Math.PI/2;
-  line.position.set(-3.2, 0.01, 3.5);
-  scene.add(line);
-
-  const building = new THREE.Group();
-  scene.add(building);
-
-  const wall = new THREE.Mesh(
-    new THREE.BoxGeometry(4.4, 2.1, 2.2),
-    new THREE.MeshStandardMaterial({color:0xf7f1e6, roughness:0.9})
-  );
-  wall.position.y = 1.05;
-  wall.castShadow = true; wall.receiveShadow = true;
-  building.add(wall);
-
-  const roofShape = new THREE.Shape();
-  roofShape.moveTo(-2.5, 0);
-  roofShape.lineTo(0, 1.3);
-  roofShape.lineTo(2.5, 0);
-  roofShape.lineTo(-2.5, 0);
-  const roofGeo = new THREE.ExtrudeGeometry(roofShape, {depth:2.6, bevelEnabled:false});
-  roofGeo.translate(0,0,-1.3);
-  const roof = new THREE.Mesh(roofGeo, new THREE.MeshStandardMaterial({color:0xcf7f4e, roughness:0.85}));
-  roof.position.y = 2.12;
-  roof.castShadow = true;
-  building.add(roof);
-
-  const trim = new THREE.Mesh(new THREE.BoxGeometry(4.46,0.09,2.26), new THREE.MeshStandardMaterial({color:0xc0392b}));
-  trim.position.y = 2.1;
-  building.add(trim);
-
-  const sign = new THREE.Mesh(
-    new THREE.PlaneGeometry(1.55, 0.665),
-    new THREE.MeshBasicMaterial({map:makeSignTexture(), transparent:true})
-  );
-  sign.position.set(-0.7, 1.78, 1.13);
-  building.add(sign);
-
-  const awning = new THREE.Mesh(new THREE.BoxGeometry(4.0,0.18,0.55), new THREE.MeshStandardMaterial({color:0xe8546f, roughness:0.6}));
-  awning.position.set(0, 1.0, 1.35);
-  awning.rotation.x = -0.18;
-  awning.castShadow = true;
-  building.add(awning);
-  const valance = new THREE.Mesh(new THREE.BoxGeometry(4.0,0.1,0.06), new THREE.MeshStandardMaterial({color:0xd62828}));
-  valance.position.set(0, 0.88, 1.58);
-  building.add(valance);
-
-  const glassMat = new THREE.MeshPhysicalMaterial({color:0xbfe3f0, roughness:0.15, transparent:true, opacity:0.75, metalness:0.05});
-  const winL = new THREE.Mesh(new THREE.BoxGeometry(1.3,1.3,0.06), glassMat);
-  winL.position.set(-1.5, 0.78, 1.12);
-  building.add(winL);
-  const winR = new THREE.Mesh(new THREE.BoxGeometry(1.3,1.3,0.06), glassMat);
-  winR.position.set(1.5, 0.78, 1.12);
-  building.add(winR);
-
-  function makeDoor(side){
-    const hinge = new THREE.Group();
-    hinge.position.set(side*0.43, 0.78, 1.12);
-    const doorMesh = new THREE.Mesh(new THREE.BoxGeometry(0.42, 1.3, 0.06), glassMat.clone());
-    doorMesh.position.x = -side*0.21;
-    doorMesh.castShadow = true;
-    const edges = new THREE.LineSegments(new THREE.EdgesGeometry(doorMesh.geometry), new THREE.LineBasicMaterial({color:0xd62828}));
-    edges.position.copy(doorMesh.position);
-    hinge.add(doorMesh, edges);
-    building.add(hinge);
-    return hinge;
-  }
-  const doorHingeL = makeDoor(-1);
-  const doorHingeR = makeDoor(1);
-
-  const wainscot = new THREE.Mesh(new THREE.BoxGeometry(4.42,0.32,2.24), new THREE.MeshStandardMaterial({color:0xb8916a, roughness:1}));
-  wainscot.position.y = 0.16;
-  wainscot.castShadow = true; wainscot.receiveShadow = true;
-  building.add(wainscot);
-
-  function makeBollard(x){
-    const g = new THREE.Group();
-    const post = new THREE.Mesh(new THREE.CylinderGeometry(0.05,0.05,0.4,10), new THREE.MeshStandardMaterial({color:0xffffff}));
-    post.position.y = 0.2;
-    post.castShadow = true;
-    const cap = new THREE.Mesh(new THREE.CylinderGeometry(0.055,0.055,0.08,10), new THREE.MeshStandardMaterial({color:0xd62828}));
-    cap.position.y = 0.42;
-    g.add(post, cap);
-    g.position.set(x, 0, 1.9);
-    building.add(g);
-  }
-  [-0.75,-0.25,0.7].forEach(makeBollard);
-
-  function makePalm(x,z,scale){
-    const g = new THREE.Group();
-    const trunkH = 1.5;
-    const trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.06,0.1,trunkH,8), new THREE.MeshStandardMaterial({color:0x8a6038, roughness:1}));
-    trunk.position.y = trunkH/2;
-    trunk.castShadow = true;
-    g.add(trunk);
-    const leafMat = new THREE.MeshStandardMaterial({color:0x3f8b4c, roughness:0.8, side:THREE.DoubleSide});
-    const leafGeo = new THREE.BoxGeometry(0.7, 0.04, 0.26);
-    leafGeo.translate(0.35, 0, 0);
-    for(let i=0;i<7;i++){
-      const yaw = new THREE.Group();
-      yaw.position.y = trunkH;
-      yaw.rotation.y = (i/7)*Math.PI*2;
-      const tilt = new THREE.Group();
-      tilt.rotation.z = -0.3;
-      const leaf = new THREE.Mesh(leafGeo, leafMat);
-      leaf.castShadow = true;
-      tilt.add(leaf);
-      yaw.add(tilt);
-      g.add(yaw);
-    }
-    g.position.set(x, 0, z);
-    g.scale.setScalar(scale);
-    scene.add(g);
-  }
-  makePalm(2.05, 1.4, 1.2);
-
-  function resize(){
-    const w = container.clientWidth, h = container.clientHeight;
-    camera.aspect = w/h;
-    camera.updateProjectionMatrix();
-    renderer.setSize(w,h,false);
-  }
-  window.addEventListener("resize", resize);
-
-  shop3d = {scene, camera, renderer, container, doorHingeL, doorHingeR, opened:false};
-
-  function animate(){
-    requestAnimationFrame(animate);
-    const titleScreen = document.getElementById("screen-title");
-    if(!titleScreen || !titleScreen.classList.contains("active")) return;
-    renderer.render(scene, camera);
-  }
-  animate();
-}
-
-function easeOutBack(t){
-  const c = 1.4;
-  return 1 + c*Math.pow(t-1,3) + c*Math.pow(t-1,2);
-}
-
-function openDoors3D(onDone){
-  if(!shop3d || shop3d.opened){ onDone(); return; }
-  shop3d.opened = true;
-  const start = performance.now();
-  const dur = 700;
-  const target = Math.PI*0.62;
-  function step(now){
-    const t = Math.min(1, (now-start)/dur);
-    const e = easeOutBack(t);
-    shop3d.doorHingeL.rotation.y = -target*e;
-    shop3d.doorHingeR.rotation.y = target*e;
-    if(t < 1) requestAnimationFrame(step);
-    else onDone();
-  }
-  requestAnimationFrame(step);
-}
-
 function enterShop(){
-  if(!shop3d || shop3d.opened) return;
-  const container = document.querySelector(".container");
+  const doors = document.getElementById("shop-doors");
+  const scene = document.querySelector(".shop2d-scene");
   const flash = document.getElementById("flash-overlay");
-  const hint = document.getElementById("shop3d-hint");
-  if(hint) hint.style.display = "none";
-  openDoors3D(()=>{
-    const cRect = document.getElementById("shop3d-container").getBoundingClientRect();
-    const outerRect = container.getBoundingClientRect();
-    const originX = ((cRect.left + cRect.width/2 - outerRect.left) / outerRect.width) * 100;
-    const originY = ((cRect.top + cRect.height/2 - outerRect.top) / outerRect.height) * 100;
-    container.style.transformOrigin = originX + "% " + originY + "%";
-    container.classList.add("sucking");
+  if(!doors || doors.classList.contains("open")) return;
+  doors.classList.add("open");
+  setTimeout(()=>{
+    const dRect = doors.getBoundingClientRect();
+    const sRect = scene.getBoundingClientRect();
+    const originX = ((dRect.left + dRect.width/2 - sRect.left) / sRect.width) * 100;
+    const originY = ((dRect.top + dRect.height/2 - sRect.top) / sRect.height) * 100;
+    scene.style.transformOrigin = originX + "% " + originY + "%";
+    scene.classList.add("sucking");
     flash.classList.add("show");
     setTimeout(()=>{
       show("screen-intro");
-      container.classList.remove("sucking");
-      container.style.transformOrigin = "";
+      scene.classList.remove("sucking");
+      scene.style.transformOrigin = "";
       setTimeout(()=>flash.classList.remove("show"), 50);
     }, 600);
-  });
+  }, 450);
 }
-
-document.addEventListener("DOMContentLoaded", initShop3D);
 
 function startQuiz(){
   order = questions.map((q,i)=>i);
@@ -1428,14 +1563,13 @@ function showAllTypes(){
     const card = document.createElement("div");
     card.className = "type-card";
     card.innerHTML = `
-      <div class="tc-emoji">${t.emoji}</div>
-      <div class="tc-body">
-        <div class="tc-code">デブBTI: ${code}</div>
-        <div class="tc-name">${t.name}</div>
-        <div class="tc-catch">「${t.catch}」</div>
-        <div class="tc-desc">${t.desc}</div>
-        <div class="tc-food">🍽 ${t.food}</div>
+      <div class="tc-row1">
+        <span class="tc-code">No.${code}</span>
       </div>
+      <div class="tc-name"><span class="tc-emoji">${t.emoji}</span>${t.name}</div>
+      <div class="tc-catch">「${t.catch}」</div>
+      <div class="tc-desc">${t.desc}</div>
+      <div class="tc-food"><span>🍽 ${t.food}</span><span class="tc-qty">x1</span></div>
     `;
     listEl.appendChild(card);
   });
@@ -1446,6 +1580,8 @@ function show(id){
   document.querySelectorAll(".screen").forEach(el=>el.classList.remove("active"));
   document.getElementById(id).classList.add("active");
   document.querySelector(".container").classList.toggle("building-mode", id === "screen-title");
+  const fullscreen2d = document.getElementById("shop2d-fullscreen");
+  if(fullscreen2d) fullscreen2d.classList.toggle("active", id === "screen-title");
 }
 </script>
 </body>
