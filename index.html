@@ -6,7 +6,7 @@
 <title>デブBTI - あなたはどんなタイプのデブ？</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Yusei+Magic&family=M+PLUS+Rounded+1c:wght@500;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Yusei+Magic&family=Mochiy+Pop+One&family=M+PLUS+Rounded+1c:wght@500;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg1:#ff6fa5;
@@ -23,9 +23,7 @@
   body{
     margin:0;
     font-family:"M PLUS Rounded 1c","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif;
-    background:linear-gradient(135deg,var(--bg1),var(--bg2),var(--bg3));
-    background-size:200% 200%;
-    animation:bgShift 12s ease-in-out infinite;
+    background:linear-gradient(180deg,#3d9be0 0%,#6ec3ee 40%,#bfe6f7 75%,#e3f4fb 100%);
     min-height:100vh;
     display:flex;
     align-items:center;
@@ -35,9 +33,107 @@
     position:relative;
     overflow-x:hidden;
   }
-  @keyframes bgShift{
-    0%,100%{background-position:0% 50%;}
-    50%{background-position:100% 50%;}
+  .cityscape{
+    position:fixed;
+    inset:0;
+    z-index:0;
+    pointer-events:none;
+    overflow:hidden;
+  }
+  .cloud{
+    position:absolute;
+    background:#fff;
+    border-radius:50px;
+    opacity:0.9;
+    animation:driftCloud linear infinite;
+  }
+  .cloud::before, .cloud::after{
+    content:"";
+    position:absolute;
+    background:#fff;
+    border-radius:50%;
+  }
+  .cloud::before{width:55%;height:90%;top:-45%;left:8%;}
+  .cloud::after{width:45%;height:75%;top:-35%;right:10%;}
+  @keyframes driftCloud{
+    0%{transform:translateX(-120px);}
+    100%{transform:translateX(calc(100vw + 120px));}
+  }
+  .skyline{
+    position:absolute;
+    left:0;right:0;bottom:60px;
+    height:90px;
+  }
+  .building{
+    position:absolute;
+    bottom:0;
+    background-color:var(--shop, #e9c9a3);
+    border:2px solid var(--ink);
+    border-bottom:none;
+  }
+  .building .awning{
+    position:absolute;
+    top:0;left:-2px;right:-2px;
+    height:9px;
+    background:repeating-linear-gradient(90deg, var(--awn-a, #d62828) 0 7px, var(--awn-b, #fff) 7px 14px);
+    border-bottom:2px solid var(--ink);
+  }
+  .building .shop-window{
+    position:absolute;
+    top:13px;left:12%;right:12%;bottom:0;
+    background:rgba(255,255,255,0.55);
+  }
+  .building .mini-sign{
+    position:absolute;
+    top:-17px;
+    left:50%;
+    transform:translateX(-50%) rotate(-2deg);
+    background:#fff;
+    border:2px solid var(--ink);
+    border-radius:4px;
+    padding:1px 3px;
+    font-size:11px;
+    line-height:1.2;
+    white-space:nowrap;
+  }
+  .palm{
+    position:absolute;
+    bottom:0;
+    width:8px;
+  }
+  .palm .trunk{
+    position:absolute;
+    bottom:0;
+    left:1px;
+    width:6px;
+    height:54px;
+    background:#7a5230;
+    border:2px solid var(--ink);
+    border-radius:2px;
+  }
+  .palm .leaf{
+    position:absolute;
+    bottom:46px;
+    width:30px;
+    height:14px;
+    background:#3f8b4c;
+    border:2px solid var(--ink);
+    border-radius:50% 50% 50% 0;
+  }
+  .road{
+    position:absolute;
+    left:0;right:0;bottom:0;
+    height:60px;
+    background:#6b7280;
+    border-top:3px solid var(--ink);
+  }
+  .road .line{
+    position:absolute;
+    top:50%;
+    height:5px;
+    width:36px;
+    background:#fff3c4;
+    border-radius:2px;
   }
   .bg-decor{
     position:fixed;
@@ -104,20 +200,15 @@
     z-index:1;
     overflow:hidden;
   }
-  .container::before{
-    content:"🍔🍕🍜🍰🍟🍩";
-    position:absolute;
-    top:-10px;
-    left:0;
-    right:0;
-    font-size:18px;
-    opacity:0.15;
-    letter-spacing:12px;
-    pointer-events:none;
+  .container.building-mode{
+    border-radius:0;
+    border-width:4px;
+    box-shadow:0 14px 0 rgba(0,0,0,0.12), 0 18px 22px rgba(0,0,0,0.3);
+    background:linear-gradient(90deg, rgba(0,0,0,0.07), transparent 7%, transparent 93%, rgba(0,0,0,0.07)), var(--card);
   }
   h1{
-    font-family:"Yusei Magic",sans-serif;
-    font-size:1.9em;
+    font-family:"Mochiy Pop One",sans-serif;
+    font-size:2em;
     text-align:center;
     margin:8px 0 4px;
     background:linear-gradient(90deg,var(--accent),var(--accent3));
@@ -135,6 +226,66 @@
     25%{transform:rotate(-2deg);}
     75%{transform:rotate(2deg);}
   }
+  .shop-front{
+    position:relative;
+    margin:-32px -28px 18px;
+    background:#fff;
+  }
+  #shop3d-container{
+    position:relative;
+    width:100%;
+    aspect-ratio:4/3;
+    cursor:pointer;
+    background:linear-gradient(180deg,#bfe3f5,#eaf7ff);
+    border-bottom:4px solid var(--ink);
+    overflow:hidden;
+  }
+  #shop3d-canvas{
+    display:block;
+    width:100%;
+    height:100%;
+  }
+  #shop3d-hint{
+    position:absolute;
+    bottom:8px;
+    left:50%;
+    transform:translateX(-50%);
+    background:#d62828;
+    color:#fff;
+    font-weight:800;
+    font-size:0.7em;
+    padding:3px 10px;
+    border-radius:999px;
+    border:2px solid var(--ink);
+    pointer-events:none;
+    animation:hintBounce 1.6s ease-in-out infinite;
+  }
+  @keyframes hintBounce{
+    0%,100%{transform:translateX(-50%) translateY(0);}
+    50%{transform:translateX(-50%) translateY(-4px);}
+  }
+  @keyframes suckIn{
+    0%{transform:scale(1); opacity:1; filter:blur(0);}
+    40%{transform:scale(1.8); opacity:1; filter:blur(0);}
+    100%{transform:scale(16); opacity:0; filter:blur(3px);}
+  }
+  .container.sucking{
+    animation:suckIn .6s cubic-bezier(.55,0,1,0.45) forwards;
+  }
+  #flash-overlay{
+    position:fixed;
+    inset:0;
+    z-index:5;
+    background:radial-gradient(circle, #fff8e0, #ffce00 75%);
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .35s ease;
+  }
+  #flash-overlay.show{
+    opacity:1;
+  }
+  .screen{display:none;}
+  .screen.active{display:block;}
   .subtitle{
     text-align:center;
     font-size:0.95em;
@@ -142,8 +293,15 @@
     margin-bottom:20px;
     opacity:0.85;
   }
-  .screen{display:none;}
-  .screen.active{display:block;}
+  #screen-intro .subtitle{
+    background:#fff3cf;
+    border-top:2px dashed #d62828;
+    border-bottom:2px dashed #d62828;
+    padding:8px 4px;
+    margin:0 0 20px;
+    color:#a8231b;
+    opacity:1;
+  }
   .intro p{
     line-height:1.7;
     font-size:0.95em;
@@ -152,6 +310,67 @@
     line-height:1.7;
     font-size:0.9em;
     padding-left:1.2em;
+  }
+  #screen-intro .intro{
+    position:relative;
+    background:#fff8ec;
+    border:3px dashed #d62828;
+    border-radius:14px;
+    padding:18px 16px 14px;
+    margin-top:18px;
+  }
+  #screen-intro .intro .menu-tag{
+    position:absolute;
+    top:-13px;
+    left:16px;
+    background:#d62828;
+    color:#fff;
+    font-weight:800;
+    font-size:0.7em;
+    letter-spacing:2px;
+    padding:3px 12px;
+    border-radius:6px;
+    border:2px solid var(--ink);
+  }
+  #screen-intro .intro ul{
+    list-style:none;
+    padding-left:0;
+  }
+  #screen-intro .intro ul li{
+    position:relative;
+    padding-left:1.5em;
+  }
+  #screen-intro .intro ul li::before{
+    content:"🍟";
+    position:absolute;
+    left:0;
+    top:0;
+    font-size:0.85em;
+  }
+  button.primary.shop-order-btn{
+    background:#d62828;
+    border-color:#ffce00;
+    color:#fff;
+  }
+  button.secondary.shop-menu-btn{
+    border-color:#d62828;
+    color:#d62828;
+  }
+  button.secondary.shop-menu-btn:hover{
+    background:#fff0ee;
+  }
+  .shop-tagline{
+    text-align:center;
+    font-size:1.1em;
+    font-weight:800;
+    color:#a8231b;
+    margin:18px 0 2px;
+  }
+  .shop-tagline-sub{
+    text-align:center;
+    font-size:0.9em;
+    opacity:0.75;
+    margin:0 0 22px;
   }
   button.primary{
     display:block;
@@ -517,6 +736,45 @@
 </style>
 </head>
 <body>
+<div id="flash-overlay" aria-hidden="true"></div>
+<div class="cityscape" aria-hidden="true">
+  <div class="cloud" style="top:6%; left:10%; width:90px; height:30px; animation-duration:55s;"></div>
+  <div class="cloud" style="top:14%; left:60%; width:120px; height:36px; animation-duration:70s; animation-delay:-20s;"></div>
+  <div class="cloud" style="top:24%; left:35%; width:70px; height:24px; animation-duration:45s; animation-delay:-10s;"></div>
+  <div class="skyline">
+    <div class="building" style="left:2%; width:11%; height:55px; --shop:#fbdca0; --awn-a:#d62828; --awn-b:#fff;">
+      <div class="awning"></div><div class="shop-window"></div><div class="mini-sign">🍕</div>
+    </div>
+    <div class="building" style="left:14%; width:9%; height:80px; --shop:#d8c3a5; --awn-a:#5b3a24; --awn-b:#e8d9c4;">
+      <div class="awning"></div><div class="shop-window"></div><div class="mini-sign">☕</div>
+    </div>
+    <div class="building" style="left:24%; width:13%; height:42px; --shop:#ffd9ec; --awn-a:#ff8fc2; --awn-b:#fff;">
+      <div class="awning"></div><div class="shop-window"></div><div class="mini-sign">🍩</div>
+    </div>
+    <div class="palm" style="left:39%;"><div class="trunk"></div><div class="leaf" style="transform:rotate(-25deg); left:-14px;"></div><div class="leaf" style="transform:rotate(15deg); left:-6px;"></div><div class="leaf" style="transform:rotate(55deg); left:2px;"></div></div>
+    <div class="building" style="left:45%; width:10%; height:65px; --shop:#f3e3c4; --awn-a:#c0392b; --awn-b:#222;">
+      <div class="awning"></div><div class="shop-window"></div><div class="mini-sign">🍜</div>
+    </div>
+    <div class="building" style="left:56%; width:14%; height:48px; --shop:#ffe1ad; --awn-a:#f2a93b; --awn-b:#fff7e6;">
+      <div class="awning"></div><div class="shop-window"></div><div class="mini-sign">🌮</div>
+    </div>
+    <div class="building" style="left:71%; width:9%; height:75px; --shop:#cdeee3; --awn-a:#4fb89a; --awn-b:#fff;">
+      <div class="awning"></div><div class="shop-window"></div><div class="mini-sign">🍦</div>
+    </div>
+    <div class="palm" style="left:83%;"><div class="trunk"></div><div class="leaf" style="transform:rotate(-25deg); left:-14px;"></div><div class="leaf" style="transform:rotate(15deg); left:-6px;"></div><div class="leaf" style="transform:rotate(55deg); left:2px;"></div></div>
+    <div class="building" style="left:89%; width:11%; height:58px; --shop:#fff3b0; --awn-a:#d62828; --awn-b:#ffce00;">
+      <div class="awning"></div><div class="shop-window"></div><div class="mini-sign">🍔</div>
+    </div>
+  </div>
+  <div class="road">
+    <div class="line" style="left:5%;"></div>
+    <div class="line" style="left:22%;"></div>
+    <div class="line" style="left:39%;"></div>
+    <div class="line" style="left:56%;"></div>
+    <div class="line" style="left:73%;"></div>
+    <div class="line" style="left:90%;"></div>
+  </div>
+</div>
 <div class="bg-decor" aria-hidden="true">
   <span style="top:4%; left:6%; font-size:2.6em; --r:-12deg; animation:floatA 17s ease-in-out infinite; animation-delay:-2s;">
     <div class="bg-sticker" style="--c:var(--accent)"><span class="emoji">🍔</span></div>
@@ -561,12 +819,23 @@
     <div class="bg-sticker" style="--c:var(--accent)"><span class="emoji">🍿</span></div>
   </span>
 </div>
-<div class="container">
+<div class="container building-mode">
 
-  <div class="screen active" id="screen-intro">
-    <h1>🍩 デブBTI 🍩</h1>
+  <div class="screen active" id="screen-title">
+    <div class="shop-front shop-front-title">
+      <div id="shop3d-container" onclick="enterShop()" role="button" aria-label="ドアを開けて入店する">
+        <canvas id="shop3d-canvas"></canvas>
+        <div id="shop3d-hint">👉 ドアをクリック</div>
+      </div>
+    </div>
+    <p class="shop-tagline">高カロリー診断専門店</p>
+    <p class="shop-tagline-sub">3Dのお店をクリックして入店しよう</p>
+  </div>
+
+  <div class="screen" id="screen-intro">
     <p class="subtitle">あなたはどんなタイプのデブ？測ってみよう</p>
     <div class="intro">
+      <span class="menu-tag">MENU</span>
       <p>MBTIをモチーフにした、ゆる〜い食生活診断です。<br>
       「食欲」「間食」「こだわり」「計画性」の4つの軸、全20問の質問に答えると、16タイプの中からあなたの「デブタイプ」と、おすすめの高カロリーメシが分かります。</p>
       <ul>
@@ -575,8 +844,8 @@
         <li>結果は完全にネタです。気軽にどうぞ</li>
       </ul>
     </div>
-    <button class="primary" onclick="startQuiz()">診断をはじめる ▶</button>
-    <button class="secondary" onclick="showAllTypes()">📖 16タイプ一覧を見る</button>
+    <button class="primary shop-order-btn" onclick="startQuiz()">🍔 診断をはじめる ▶</button>
+    <button class="secondary shop-menu-btn" onclick="showAllTypes()">📖 16タイプ一覧を見る</button>
   </div>
 
   <div class="screen" id="screen-alltypes">
@@ -632,6 +901,7 @@
 
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 // 4軸: 食欲(M/L) 間食(S/N) こだわり(G/B) 計画性(P/I)
 const questions = [
@@ -793,6 +1063,261 @@ function shuffle(arr){
 
 const foodPellets = ["🍙","🍕","🍔","🍰","🍩","🍟","🍗","🍫","🍪","🍦"];
 
+// ---------- 3D shop scene (Three.js) ----------
+let shop3d = null;
+
+function makeSignTexture(){
+  const cv = document.createElement("canvas");
+  cv.width = 512; cv.height = 220;
+  const ctx = cv.getContext("2d");
+  ctx.clearRect(0,0,cv.width,cv.height);
+  // yellow arrow chevron
+  const ax=20, ay=50, aw=170, ah=110;
+  function arrowPath(){
+    ctx.beginPath();
+    ctx.moveTo(ax, ay);
+    ctx.lineTo(ax+aw*0.62, ay);
+    ctx.lineTo(ax+aw, ay+ah/2);
+    ctx.lineTo(ax+aw*0.62, ay+ah);
+    ctx.lineTo(ax, ay+ah);
+    ctx.closePath();
+  }
+  arrowPath();
+  ctx.fillStyle = "#2d1b0e";
+  ctx.save(); ctx.translate(0,0); ctx.restore();
+  ctx.lineWidth = 14;
+  ctx.strokeStyle = "#2d1b0e";
+  ctx.stroke();
+  ctx.fillStyle = "#ffce00";
+  ctx.fill();
+  // text
+  ctx.font = "bold 76px 'Mochiy Pop One','Hiragino Maru Gothic ProN',sans-serif";
+  ctx.fillStyle = "#d62828";
+  ctx.textBaseline = "middle";
+  ctx.lineWidth = 6;
+  ctx.strokeStyle = "#fff";
+  ctx.strokeText("デブBTI", ax+aw+24, ay+ah/2+38);
+  ctx.fillText("デブBTI", ax+aw+24, ay+ah/2+38);
+  const tex = new THREE.CanvasTexture(cv);
+  tex.needsUpdate = true;
+  return tex;
+}
+
+function initShop3D(){
+  const canvas = document.getElementById("shop3d-container") && document.getElementById("shop3d-canvas");
+  const container = document.getElementById("shop3d-container");
+  if(!canvas || !container || typeof THREE === "undefined") return;
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(30, container.clientWidth/container.clientHeight, 0.1, 100);
+  camera.position.set(0.6, 2.3, 8.6);
+  camera.lookAt(0, 1.3, 0);
+
+  const renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.setSize(container.clientWidth, container.clientHeight, false);
+  renderer.shadowMap.enabled = true;
+
+  scene.add(new THREE.HemisphereLight(0xbfe3f5, 0x55483a, 1.0));
+  const sun = new THREE.DirectionalLight(0xfff3da, 1.15);
+  sun.position.set(4, 7, 6);
+  sun.castShadow = true;
+  sun.shadow.mapSize.set(1024,1024);
+  sun.shadow.camera.left = -8; sun.shadow.camera.right = 8;
+  sun.shadow.camera.top = 8; sun.shadow.camera.bottom = -8;
+  scene.add(sun);
+
+  const ground = new THREE.Mesh(
+    new THREE.PlaneGeometry(40,40),
+    new THREE.MeshStandardMaterial({color:0x8b8f97, roughness:1})
+  );
+  ground.rotation.x = -Math.PI/2;
+  ground.receiveShadow = true;
+  scene.add(ground);
+  // parking line
+  const line = new THREE.Mesh(new THREE.PlaneGeometry(0.3,2.4), new THREE.MeshStandardMaterial({color:0xfff3c4}));
+  line.rotation.x = -Math.PI/2;
+  line.position.set(-3.2, 0.01, 3.5);
+  scene.add(line);
+
+  const building = new THREE.Group();
+  scene.add(building);
+
+  const wall = new THREE.Mesh(
+    new THREE.BoxGeometry(4.4, 2.1, 2.2),
+    new THREE.MeshStandardMaterial({color:0xf7f1e6, roughness:0.9})
+  );
+  wall.position.y = 1.05;
+  wall.castShadow = true; wall.receiveShadow = true;
+  building.add(wall);
+
+  const roofShape = new THREE.Shape();
+  roofShape.moveTo(-2.5, 0);
+  roofShape.lineTo(0, 1.3);
+  roofShape.lineTo(2.5, 0);
+  roofShape.lineTo(-2.5, 0);
+  const roofGeo = new THREE.ExtrudeGeometry(roofShape, {depth:2.6, bevelEnabled:false});
+  roofGeo.translate(0,0,-1.3);
+  const roof = new THREE.Mesh(roofGeo, new THREE.MeshStandardMaterial({color:0xcf7f4e, roughness:0.85}));
+  roof.position.y = 2.12;
+  roof.castShadow = true;
+  building.add(roof);
+
+  const trim = new THREE.Mesh(new THREE.BoxGeometry(4.46,0.09,2.26), new THREE.MeshStandardMaterial({color:0xc0392b}));
+  trim.position.y = 2.1;
+  building.add(trim);
+
+  const sign = new THREE.Mesh(
+    new THREE.PlaneGeometry(1.55, 0.665),
+    new THREE.MeshBasicMaterial({map:makeSignTexture(), transparent:true})
+  );
+  sign.position.set(-0.7, 1.78, 1.13);
+  building.add(sign);
+
+  const awning = new THREE.Mesh(new THREE.BoxGeometry(4.0,0.18,0.55), new THREE.MeshStandardMaterial({color:0xe8546f, roughness:0.6}));
+  awning.position.set(0, 1.0, 1.35);
+  awning.rotation.x = -0.18;
+  awning.castShadow = true;
+  building.add(awning);
+  const valance = new THREE.Mesh(new THREE.BoxGeometry(4.0,0.1,0.06), new THREE.MeshStandardMaterial({color:0xd62828}));
+  valance.position.set(0, 0.88, 1.58);
+  building.add(valance);
+
+  const glassMat = new THREE.MeshPhysicalMaterial({color:0xbfe3f0, roughness:0.15, transparent:true, opacity:0.75, metalness:0.05});
+  const winL = new THREE.Mesh(new THREE.BoxGeometry(1.3,1.3,0.06), glassMat);
+  winL.position.set(-1.5, 0.78, 1.12);
+  building.add(winL);
+  const winR = new THREE.Mesh(new THREE.BoxGeometry(1.3,1.3,0.06), glassMat);
+  winR.position.set(1.5, 0.78, 1.12);
+  building.add(winR);
+
+  function makeDoor(side){
+    const hinge = new THREE.Group();
+    hinge.position.set(side*0.43, 0.78, 1.12);
+    const doorMesh = new THREE.Mesh(new THREE.BoxGeometry(0.42, 1.3, 0.06), glassMat.clone());
+    doorMesh.position.x = -side*0.21;
+    doorMesh.castShadow = true;
+    const edges = new THREE.LineSegments(new THREE.EdgesGeometry(doorMesh.geometry), new THREE.LineBasicMaterial({color:0xd62828}));
+    edges.position.copy(doorMesh.position);
+    hinge.add(doorMesh, edges);
+    building.add(hinge);
+    return hinge;
+  }
+  const doorHingeL = makeDoor(-1);
+  const doorHingeR = makeDoor(1);
+
+  const wainscot = new THREE.Mesh(new THREE.BoxGeometry(4.42,0.32,2.24), new THREE.MeshStandardMaterial({color:0xb8916a, roughness:1}));
+  wainscot.position.y = 0.16;
+  wainscot.castShadow = true; wainscot.receiveShadow = true;
+  building.add(wainscot);
+
+  function makeBollard(x){
+    const g = new THREE.Group();
+    const post = new THREE.Mesh(new THREE.CylinderGeometry(0.05,0.05,0.4,10), new THREE.MeshStandardMaterial({color:0xffffff}));
+    post.position.y = 0.2;
+    post.castShadow = true;
+    const cap = new THREE.Mesh(new THREE.CylinderGeometry(0.055,0.055,0.08,10), new THREE.MeshStandardMaterial({color:0xd62828}));
+    cap.position.y = 0.42;
+    g.add(post, cap);
+    g.position.set(x, 0, 1.9);
+    building.add(g);
+  }
+  [-0.75,-0.25,0.7].forEach(makeBollard);
+
+  function makePalm(x,z,scale){
+    const g = new THREE.Group();
+    const trunkH = 1.5;
+    const trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.06,0.1,trunkH,8), new THREE.MeshStandardMaterial({color:0x8a6038, roughness:1}));
+    trunk.position.y = trunkH/2;
+    trunk.castShadow = true;
+    g.add(trunk);
+    const leafMat = new THREE.MeshStandardMaterial({color:0x3f8b4c, roughness:0.8, side:THREE.DoubleSide});
+    const leafGeo = new THREE.BoxGeometry(0.7, 0.04, 0.26);
+    leafGeo.translate(0.35, 0, 0);
+    for(let i=0;i<7;i++){
+      const yaw = new THREE.Group();
+      yaw.position.y = trunkH;
+      yaw.rotation.y = (i/7)*Math.PI*2;
+      const tilt = new THREE.Group();
+      tilt.rotation.z = -0.3;
+      const leaf = new THREE.Mesh(leafGeo, leafMat);
+      leaf.castShadow = true;
+      tilt.add(leaf);
+      yaw.add(tilt);
+      g.add(yaw);
+    }
+    g.position.set(x, 0, z);
+    g.scale.setScalar(scale);
+    scene.add(g);
+  }
+  makePalm(2.05, 1.4, 1.2);
+
+  function resize(){
+    const w = container.clientWidth, h = container.clientHeight;
+    camera.aspect = w/h;
+    camera.updateProjectionMatrix();
+    renderer.setSize(w,h,false);
+  }
+  window.addEventListener("resize", resize);
+
+  shop3d = {scene, camera, renderer, container, doorHingeL, doorHingeR, opened:false};
+
+  function animate(){
+    requestAnimationFrame(animate);
+    const titleScreen = document.getElementById("screen-title");
+    if(!titleScreen || !titleScreen.classList.contains("active")) return;
+    renderer.render(scene, camera);
+  }
+  animate();
+}
+
+function easeOutBack(t){
+  const c = 1.4;
+  return 1 + c*Math.pow(t-1,3) + c*Math.pow(t-1,2);
+}
+
+function openDoors3D(onDone){
+  if(!shop3d || shop3d.opened){ onDone(); return; }
+  shop3d.opened = true;
+  const start = performance.now();
+  const dur = 700;
+  const target = Math.PI*0.62;
+  function step(now){
+    const t = Math.min(1, (now-start)/dur);
+    const e = easeOutBack(t);
+    shop3d.doorHingeL.rotation.y = -target*e;
+    shop3d.doorHingeR.rotation.y = target*e;
+    if(t < 1) requestAnimationFrame(step);
+    else onDone();
+  }
+  requestAnimationFrame(step);
+}
+
+function enterShop(){
+  if(!shop3d || shop3d.opened) return;
+  const container = document.querySelector(".container");
+  const flash = document.getElementById("flash-overlay");
+  const hint = document.getElementById("shop3d-hint");
+  if(hint) hint.style.display = "none";
+  openDoors3D(()=>{
+    const cRect = document.getElementById("shop3d-container").getBoundingClientRect();
+    const outerRect = container.getBoundingClientRect();
+    const originX = ((cRect.left + cRect.width/2 - outerRect.left) / outerRect.width) * 100;
+    const originY = ((cRect.top + cRect.height/2 - outerRect.top) / outerRect.height) * 100;
+    container.style.transformOrigin = originX + "% " + originY + "%";
+    container.classList.add("sucking");
+    flash.classList.add("show");
+    setTimeout(()=>{
+      show("screen-intro");
+      container.classList.remove("sucking");
+      container.style.transformOrigin = "";
+      setTimeout(()=>flash.classList.remove("show"), 50);
+    }, 600);
+  });
+}
+
+document.addEventListener("DOMContentLoaded", initShop3D);
+
 function startQuiz(){
   order = questions.map((q,i)=>i);
   current = 0;
@@ -920,6 +1445,7 @@ function showAllTypes(){
 function show(id){
   document.querySelectorAll(".screen").forEach(el=>el.classList.remove("active"));
   document.getElementById(id).classList.add("active");
+  document.querySelector(".container").classList.toggle("building-mode", id === "screen-title");
 }
 </script>
 </body>
