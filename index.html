@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>デブBTI - あなたはどんなタイプのデブ？</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Yusei+Magic&family=M+PLUS+Rounded+1c:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg1:#ff6fa5;
+    --bg2:#ffb84d;
+    --bg3:#ffe34d;
+    --accent:#ff3d68;
+    --accent2:#00c2a8;
+    --accent3:#7c5cff;
+    --card:#fffdf7;
+    --text:#4a3728;
+    --ink:#2d1b0e;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:"M PLUS Rounded 1c","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif;
+    background:linear-gradient(135deg,var(--bg1),var(--bg2),var(--bg3));
+    background-size:200% 200%;
+    animation:bgShift 12s ease-in-out infinite;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    color:var(--text);
+    position:relative;
+    overflow-x:hidden;
+  }
+  @keyframes bgShift{
+    0%,100%{background-position:0% 50%;}
+    50%{background-position:100% 50%;}
+  }
+  .bg-decor{
+    position:fixed;
+    inset:0;
+    overflow:hidden;
+    z-index:0;
+    pointer-events:none;
+  }
+  .bg-decor span{
+    position:absolute;
+    opacity:0.22;
+    filter:drop-shadow(0 4px 6px rgba(0,0,0,0.08));
+    --r:0deg;
+    transform:rotate(var(--r));
+    will-change:transform;
+  }
+  @keyframes floatA{
+    0%,100%{transform:translate(0,0) rotate(var(--r));}
+    25%{transform:translate(30px,-40px) rotate(calc(var(--r) + 14deg));}
+    50%{transform:translate(-25px,10px) rotate(calc(var(--r) - 10deg));}
+    75%{transform:translate(15px,35px) rotate(calc(var(--r) + 6deg));}
+  }
+  @keyframes floatB{
+    0%,100%{transform:translate(0,0) rotate(var(--r));}
+    25%{transform:translate(-35px,20px) rotate(calc(var(--r) - 16deg));}
+    50%{transform:translate(20px,40px) rotate(calc(var(--r) + 9deg));}
+    75%{transform:translate(-15px,-25px) rotate(calc(var(--r) - 5deg));}
+  }
+  @keyframes floatC{
+    0%,100%{transform:translate(0,0) rotate(var(--r));}
+    25%{transform:translate(25px,30px) rotate(calc(var(--r) + 11deg));}
+    50%{transform:translate(-30px,-15px) rotate(calc(var(--r) - 13deg));}
+    75%{transform:translate(35px,-10px) rotate(calc(var(--r) + 7deg));}
+  }
+  @keyframes floatD{
+    0%,100%{transform:translate(0,0) rotate(var(--r));}
+    25%{transform:translate(-20px,-30px) rotate(calc(var(--r) - 9deg));}
+    50%{transform:translate(30px,-5px) rotate(calc(var(--r) + 15deg));}
+    75%{transform:translate(-10px,25px) rotate(calc(var(--r) - 6deg));}
+  }
+  .container{
+    background:var(--card);
+    border-radius:28px;
+    max-width:560px;
+    width:100%;
+    padding:32px 28px;
+    border:4px solid var(--ink);
+    box-shadow:8px 10px 0 var(--ink), 8px 10px 30px rgba(0,0,0,0.2);
+    position:relative;
+    z-index:1;
+    overflow:hidden;
+  }
+  .container::before{
+    content:"🍔🍕🍜🍰🍟🍩";
+    position:absolute;
+    top:-10px;
+    left:0;
+    right:0;
+    font-size:18px;
+    opacity:0.15;
+    letter-spacing:12px;
+    pointer-events:none;
+  }
+  h1{
+    font-family:"Yusei Magic",sans-serif;
+    font-size:1.9em;
+    text-align:center;
+    margin:8px 0 4px;
+    background:linear-gradient(90deg,var(--accent),var(--accent3));
+    -webkit-background-clip:text;
+    background-clip:text;
+    -webkit-text-fill-color:transparent;
+    color:var(--accent);
+    display:inline-block;
+    width:100%;
+    text-shadow:none;
+    animation:wiggle 3s ease-in-out infinite;
+  }
+  @keyframes wiggle{
+    0%,100%{transform:rotate(0deg);}
+    25%{transform:rotate(-2deg);}
+    75%{transform:rotate(2deg);}
+  }
+  .subtitle{
+    text-align:center;
+    font-size:0.95em;
+    font-weight:700;
+    margin-bottom:20px;
+    opacity:0.85;
+  }
+  .screen{display:none;}
+  .screen.active{display:block;}
+  .intro p{
+    line-height:1.7;
+    font-size:0.95em;
+  }
+  .intro ul{
+    line-height:1.7;
+    font-size:0.9em;
+    padding-left:1.2em;
+  }
+  button.primary{
+    display:block;
+    width:100%;
+    padding:15px;
+    margin-top:20px;
+    border:3px solid var(--ink);
+    border-radius:999px;
+    background:var(--accent);
+    color:#fff;
+    font-size:1.1em;
+    font-weight:800;
+    cursor:pointer;
+    box-shadow:4px 5px 0 var(--ink);
+    transition:transform .12s, box-shadow .12s;
+  }
+  button.primary:hover{
+    transform:translate(1px,2px);
+    box-shadow:2px 3px 0 var(--ink);
+  }
+  button.primary:active{
+    transform:translate(4px,5px);
+    box-shadow:0 0 0 var(--ink);
+  }
+  .progress-wrap{
+    background:#eee;
+    border:2px solid var(--ink);
+    border-radius:10px;
+    height:12px;
+    overflow:hidden;
+    margin-bottom:18px;
+  }
+  .progress-bar{
+    height:100%;
+    background:linear-gradient(90deg,var(--accent),var(--accent3),var(--accent2));
+    width:0%;
+    transition:width .3s;
+  }
+  .q-count{
+    text-align:right;
+    font-size:0.8em;
+    opacity:0.6;
+    margin-bottom:6px;
+  }
+  .q-text{
+    font-size:1.15em;
+    font-weight:bold;
+    text-align:center;
+    margin:18px 0 24px;
+    line-height:1.5;
+    min-height:3em;
+  }
+  .choice{
+    display:block;
+    width:100%;
+    text-align:center;
+    padding:13px 16px;
+    margin-bottom:12px;
+    border:3px solid var(--ink);
+    border-radius:18px;
+    background:#fffaf0;
+    cursor:pointer;
+    font-size:0.95em;
+    font-weight:800;
+    line-height:1.4;
+    box-shadow:3px 4px 0 var(--ink);
+    transition:transform .12s, box-shadow .12s, background .12s;
+  }
+  .choice:hover{
+    background:#fff0e6;
+    transform:translate(1px,2px);
+    box-shadow:1px 2px 0 var(--ink);
+  }
+  .choice:active{
+    transform:translate(3px,4px);
+    box-shadow:0 0 0 var(--ink);
+  }
+  .result-emoji{
+    font-size:3.4em;
+    text-align:center;
+    margin-bottom:4px;
+    animation:bounce 1.6s ease-in-out infinite;
+  }
+  @keyframes bounce{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-8px);}
+  }
+  .result-code{
+    text-align:center;
+    font-size:0.85em;
+    letter-spacing:3px;
+    opacity:0.6;
+    margin-bottom:2px;
+  }
+  .result-name{
+    text-align:center;
+    font-family:"Yusei Magic",sans-serif;
+    font-size:1.6em;
+    font-weight:bold;
+    color:var(--accent);
+    text-shadow:2px 2px 0 var(--ink);
+    -webkit-text-stroke:0.5px var(--ink);
+    margin-bottom:16px;
+  }
+  .result-catch{
+    text-align:center;
+    font-size:0.95em;
+    font-weight:800;
+    color:#fff;
+    background:var(--accent3);
+    display:block;
+    width:fit-content;
+    padding:6px 16px;
+    border-radius:999px;
+    border:2px solid var(--ink);
+    margin:0 auto 16px;
+  }
+  .result-desc{
+    line-height:1.8;
+    font-size:0.95em;
+    background:#fff5e6;
+    border:2px solid var(--ink);
+    border-radius:16px;
+    padding:16px;
+    margin-bottom:16px;
+  }
+  .point-cols{
+    display:flex;
+    gap:10px;
+    margin-bottom:16px;
+  }
+  .point-box{
+    flex:1;
+    border-radius:16px;
+    padding:12px 14px;
+    border:2px solid var(--ink);
+  }
+  .point-box.point-good{background:#d6fbe9;}
+  .point-box.point-bad{background:#ffe3d6;}
+  .point-label{
+    font-size:0.8em;
+    font-weight:800;
+    margin-bottom:6px;
+  }
+  .point-box ul{
+    margin:0;
+    padding-left:1.1em;
+    font-size:0.8em;
+    line-height:1.6;
+  }
+  .food-box{
+    background:#ffeef0;
+    border-radius:16px;
+    padding:16px;
+    margin-bottom:8px;
+    border:3px dashed var(--accent);
+  }
+  .food-box .label{
+    font-weight:bold;
+    color:var(--accent);
+    font-size:0.85em;
+    margin-bottom:6px;
+  }
+  .food-box .food-name{
+    font-size:1.2em;
+    font-weight:bold;
+    margin-bottom:4px;
+  }
+  .food-box .food-reason{
+    font-size:0.88em;
+    line-height:1.6;
+    opacity:0.85;
+  }
+  .axis-bars{
+    margin:18px 0;
+    font-size:0.8em;
+  }
+  .axis-row{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-bottom:8px;
+  }
+  .axis-row .axis-label{
+    width:90px;
+    flex-shrink:0;
+    opacity:0.7;
+  }
+  .axis-row .axis-track{
+    flex:1;
+    height:9px;
+    background:#eee;
+    border:1.5px solid var(--ink);
+    border-radius:6px;
+    overflow:hidden;
+  }
+  .axis-row .axis-fill{
+    height:100%;
+    background:linear-gradient(90deg,var(--accent2),var(--accent3));
+  }
+  button.secondary{
+    display:block;
+    width:100%;
+    padding:12px;
+    margin-top:12px;
+    border:3px solid var(--ink);
+    border-radius:999px;
+    background:#fff;
+    color:var(--accent3);
+    font-size:0.95em;
+    font-weight:800;
+    cursor:pointer;
+    box-shadow:4px 5px 0 var(--ink);
+    transition:transform .12s, box-shadow .12s;
+  }
+  button.secondary:hover{
+    background:#f4f1ff;
+    transform:translate(1px,2px);
+    box-shadow:2px 3px 0 var(--ink);
+  }
+  button.secondary:active{
+    transform:translate(4px,5px);
+    box-shadow:0 0 0 var(--ink);
+  }
+  .back-link{
+    display:inline-block;
+    margin-bottom:14px;
+    font-size:0.85em;
+    color:#fff;
+    background:var(--accent3);
+    padding:5px 14px;
+    border:2px solid var(--ink);
+    border-radius:999px;
+    cursor:pointer;
+    font-weight:800;
+  }
+  .type-card{
+    display:flex;
+    gap:12px;
+    align-items:flex-start;
+    border:3px solid var(--ink);
+    border-radius:16px;
+    padding:14px;
+    margin-bottom:12px;
+    background:#fffaf0;
+    box-shadow:3px 4px 0 var(--ink);
+  }
+  .type-card .tc-emoji{
+    font-size:1.8em;
+    line-height:1;
+  }
+  .type-card .tc-body{flex:1;}
+  .type-card .tc-code{
+    font-size:0.75em;
+    letter-spacing:2px;
+    opacity:0.55;
+  }
+  .type-card .tc-name{
+    font-weight:bold;
+    color:var(--accent);
+    font-size:1.05em;
+    margin:1px 0 2px;
+  }
+  .type-card .tc-catch{
+    font-size:0.8em;
+    font-weight:bold;
+    color:var(--accent2);
+    margin-bottom:6px;
+  }
+  .type-card .tc-desc{
+    font-size:0.85em;
+    line-height:1.5;
+    margin-bottom:6px;
+  }
+  .type-card .tc-food{
+    font-size:0.82em;
+    font-weight:700;
+    background:#ffeef0;
+    border:2px solid var(--accent);
+    border-radius:999px;
+    padding:5px 12px;
+    display:inline-block;
+  }
+</style>
+</head>
+<body>
+<div class="bg-decor" aria-hidden="true">
+  <span style="top:4%; left:6%; font-size:2.6em; --r:-12deg; animation:floatA 17s ease-in-out infinite; animation-delay:-2s;">🍔</span>
+  <span style="top:10%; left:80%; font-size:3.2em; --r:15deg; animation:floatB 21s ease-in-out infinite; animation-delay:-9s;">🍕</span>
+  <span style="top:22%; left:32%; font-size:2.2em; --r:8deg; animation:floatC 15s ease-in-out infinite; animation-delay:-4s;">🍩</span>
+  <span style="top:6%; left:48%; font-size:2.4em; --r:-6deg; animation:floatD 19s ease-in-out infinite; animation-delay:-11s;">🍟</span>
+  <span style="top:34%; left:90%; font-size:2.8em; --r:-10deg; animation:floatA 23s ease-in-out infinite; animation-delay:-6s;">🍗</span>
+  <span style="top:46%; left:4%; font-size:3em; --r:10deg; animation:floatB 16s ease-in-out infinite; animation-delay:-1s;">🍰</span>
+  <span style="top:58%; left:85%; font-size:2.3em; --r:18deg; animation:floatC 20s ease-in-out infinite; animation-delay:-13s;">🧀</span>
+  <span style="top:62%; left:20%; font-size:2.6em; --r:-15deg; animation:floatD 18s ease-in-out infinite; animation-delay:-7s;">🍜</span>
+  <span style="top:72%; left:55%; font-size:2.2em; --r:6deg; animation:floatA 22s ease-in-out infinite; animation-delay:-15s;">🍪</span>
+  <span style="top:80%; left:8%; font-size:2.8em; --r:-8deg; animation:floatB 14s ease-in-out infinite; animation-delay:-3s;">🍫</span>
+  <span style="top:84%; left:75%; font-size:3em; --r:12deg; animation:floatC 24s ease-in-out infinite; animation-delay:-10s;">🍦</span>
+  <span style="top:90%; left:40%; font-size:2.4em; --r:-5deg; animation:floatD 17s ease-in-out infinite; animation-delay:-5s;">🥓</span>
+  <span style="top:14%; left:65%; font-size:2.1em; --r:20deg; animation:floatA 19s ease-in-out infinite; animation-delay:-8s;">🧁</span>
+  <span style="top:50%; left:48%; font-size:2.6em; --r:-18deg; animation:floatB 25s ease-in-out infinite; animation-delay:-12s;">🍿</span>
+</div>
+<div class="container">
+
+  <div class="screen active" id="screen-intro">
+    <h1>🍩 デブBTI 🍩</h1>
+    <p class="subtitle">あなたはどんなタイプのデブ？測ってみよう</p>
+    <div class="intro">
+      <p>MBTIをモチーフにした、ゆる〜い食生活診断です。<br>
+      「食欲」「間食」「こだわり」「計画性」の4つの軸、全20問の質問に答えると、16タイプの中からあなたの「デブタイプ」と、おすすめの高カロリーメシが分かります。</p>
+      <ul>
+        <li>所要時間：約3分</li>
+        <li>各質問は「とてもそう思う」〜「全くそう思わない」の4段階で回答</li>
+        <li>結果は完全にネタです。気軽にどうぞ</li>
+      </ul>
+    </div>
+    <button class="primary" onclick="startQuiz()">診断をはじめる ▶</button>
+    <button class="secondary" onclick="showAllTypes()">📖 16タイプ一覧を見る</button>
+  </div>
+
+  <div class="screen" id="screen-alltypes">
+    <span class="back-link" onclick="show('screen-intro')">◀ 戻る</span>
+    <h1 style="font-size:1.3em;">16タイプ一覧</h1>
+    <p class="subtitle">すべてのデブタイプとおすすめメシ</p>
+    <div id="alltypes-list"></div>
+    <button class="primary" onclick="startQuiz()">診断をはじめる ▶</button>
+  </div>
+
+  <div class="screen" id="screen-quiz">
+    <div class="q-count" id="q-count"></div>
+    <div class="progress-wrap"><div class="progress-bar" id="progress-bar"></div></div>
+    <div class="q-text" id="q-text"></div>
+    <div id="choices"></div>
+  </div>
+
+  <div class="screen" id="screen-result">
+    <div class="result-emoji" id="result-emoji"></div>
+    <div class="result-code" id="result-code"></div>
+    <div class="result-name" id="result-name"></div>
+    <div class="result-catch" id="result-catch"></div>
+    <div class="result-desc" id="result-desc"></div>
+    <div class="point-cols">
+      <div class="point-box point-good">
+        <div class="point-label">😊 愛されポイント</div>
+        <ul id="result-good"></ul>
+      </div>
+      <div class="point-box point-bad">
+        <div class="point-label">😅 気をつけたいポイント</div>
+        <ul id="result-bad"></ul>
+      </div>
+    </div>
+    <div class="food-box">
+      <div class="label">🍽 あなたにおすすめの高カロリーメシ</div>
+      <div class="food-name" id="result-food-name"></div>
+      <div class="food-reason" id="result-food-reason"></div>
+    </div>
+    <div class="axis-bars" id="axis-bars"></div>
+    <button class="primary" onclick="restartQuiz()">もう一度診断する 🔁</button>
+    <button class="secondary" onclick="showAllTypes()">📖 16タイプ一覧を見る</button>
+  </div>
+
+</div>
+
+<script>
+// 4軸: 食欲(M/L) 間食(S/N) こだわり(G/B) 計画性(P/I)
+const questions = [
+  // 食欲軸 M(もりもり大食い) / L(ちょこちょこ少食)
+  {axis:"ML", a:"M", b:"L", text:"頼むときはつい「とりあえず大盛りで」と言ってしまう"},
+  {axis:"ML", a:"M", b:"L", text:"出された料理を残すのは罪だと感じる"},
+  {axis:"ML", a:"M", b:"L", text:"食べ放題に行ったら「元を取るまで」食べる"},
+  {axis:"ML", a:"M", b:"L", text:"お腹いっぱいでも「あと一品」を頼んでしまう"},
+  {axis:"ML", a:"M", b:"L", text:"毎回の食事はしっかり完食したい派"},
+
+  // 間食軸 S(間食大好き) / N(間食しない)
+  {axis:"SN", a:"S", b:"N", text:"作業や勉強の合間に何か口に入れたくなる"},
+  {axis:"SN", a:"S", b:"N", text:"家にお菓子のストックが常にある"},
+  {axis:"SN", a:"S", b:"N", text:"テレビやスマホを見ながらの「ながら食べ」がやめられない"},
+  {axis:"SN", a:"S", b:"N", text:"夜中に小腹が空くとついコンビニに行ってしまう"},
+  {axis:"SN", a:"S", b:"N", text:"飲み物も甘くてカロリーのあるものを選びがち"},
+
+  // こだわり軸 G(味・グルメ重視) / B(量・ボリューム重視)
+  {axis:"GB", a:"G", b:"B", text:"多少高くても美味しいものを求めて遠くまで行く派"},
+  {axis:"GB", a:"G", b:"B", text:"SNSで話題の店や新メニューは必ずチェックする"},
+  {axis:"GB", a:"G", b:"B", text:"同じ予算なら「少量で美味しいもの」を選ぶ"},
+  {axis:"GB", a:"G", b:"B", text:"食レポや食べ歩きが趣味と言える"},
+  {axis:"GB", a:"G", b:"B", text:"一口目の感動を大事にしたいタイプ"},
+
+  // 計画性軸 P(計画派) / I(衝動派)
+  {axis:"PI", a:"P", b:"I", text:"「今日から食事制限」と決めたら事前にメニューを考える"},
+  {axis:"PI", a:"P", b:"I", text:"ダイエット中は毎食のカロリーを記録したくなる"},
+  {axis:"PI", a:"P", b:"I", text:"「明日は焼肉だから今日は控えよう」と調整できる"},
+  {axis:"PI", a:"P", b:"I", text:"外食するお店は事前にネットで決めてから行く"},
+  {axis:"PI", a:"P", b:"I", text:"始めたダイエットは最後まできっちり続けられる"}
+];
+
+// MBTI方式の4段階リッカート（中間なし、強弱2段階×2方向）
+const likertOptions = [
+  {label:"とてもそう思う", dir:"a", weight:2},
+  {label:"そう思う", dir:"a", weight:1},
+  {label:"あまりそう思わない", dir:"b", weight:1},
+  {label:"全くそう思わない", dir:"b", weight:2}
+];
+
+const types = {
+  MSGP:{emoji:"👑", name:"美食暴君デブ",
+    catch:"今日も完全攻略、悔いなき暴食。",
+    desc:"「食べたい時に、一番美味しい形で、たくさん」を本気で叶えようとする完全主義者。三食はもちろん間食タイムまで事前にスケジュールへ組み込み、行く店も注文する量も全部計算済み。気づけば一日の予定が「いつ何を食べるか」で埋まっている。",
+    good:["美味しいものを見つける情報収集力が高い","「次はどこ行く？」と周りを巻き込む発信力がある"],
+    bad:["食べる予定が崩れるとテンションが急降下する","「今日は控える」が一番苦手な言葉"],
+    food:"焼肉食べ放題＋シメのラーメン", reason:"質も量も妥協しないあなたには、コース全制覇＋シメまでセットになった鉄板の組み合わせがぴったり。"},
+  MSGI:{emoji:"🎉", name:"快楽探求デブ",
+    catch:"理屈はいらない、美味しければそれでいい。",
+    desc:"お腹が空いたら即行動。目の前に美味しそうなものがあれば、計画もカロリーも関係なし。間食も「ちょっとだけ」のはずが、気づけば一袋を完食している。その場のテンションで動く分、誰よりも食の引き出しが多い。",
+    good:["新しいお店やメニューに飛び込む勇気がある","一緒に食べると誰よりも楽しそうにしてくれる"],
+    bad:["「あとで後悔する」が毎回の決まり文句","気が向かないと急に食欲がなくなることもある"],
+    food:"厚切りステーキ丼（高級チーズがけ）", reason:"思い立ったら即実行のあなたには、見た瞬間「これだ」と頼める豪華などん一杯が似合います。"},
+  MSBP:{emoji:"⚙️", name:"効率重視デブ",
+    catch:"満腹までの最短ルートを知っている。",
+    desc:"美味しさより「どれだけ効率よく満腹になれるか」を重視する合理派。間食のタイミングまで考えて、コスパと満足度が最大になる組み合わせを逆算する。気づけば友人より先にメニューの「大盛り無料」の文字を見つけている。",
+    good:["コスパの良いお店を見つける目利き力がある","段取りがしっかりしていて頼りになる"],
+    bad:["量を優先しすぎて味の感想が「多くて満足」で終わる","予定外の出費（追加注文）に弱い"],
+    food:"特盛りカツカレー", reason:"量・満足度・値段のバランスを常に計算するあなたには、コスパ最強の特盛りメニューがおすすめ。"},
+  MSBI:{emoji:"🔥", name:"欲望全開デブ",
+    catch:"お腹の声に、誰よりも忠実。",
+    desc:"計画もカロリーも気にせず、お腹が空いたらとにかく量を食べる。間食も気の向くままに手を伸ばし、気づけば机の上にお菓子の空き袋が並んでいる。本能に従って生きる、ある意味とても健全なタイプ。",
+    good:["素直で裏表がなく、一緒にいて気が楽","満腹になるまでの瞬発力が誰よりも高い"],
+    bad:["「あと少しだけ」が結局全部食べることになる","計画的な食事管理が大の苦手"],
+    food:"メガ盛りラーメン（全部のせ）", reason:"理屈より直感のあなたには、見た目から満腹感が爆発するメガ盛り一杯がぴったりです。"},
+  MNGP:{emoji:"🍷", name:"正統派グルメデブ",
+    catch:"間食はしない。その分、本気で三食と向き合う。",
+    desc:"間食には興味がなく、その代わり三食のクオリティに全力を注ぐ。事前に行きたい店をリサーチし、当日は迷わずベストな注文を組み立てる。一食一食を「メインイベント」として丁寧に向き合う、食の優等生。",
+    good:["一食に対する集中力と知識量が高い","誘った店選びのセンスが信頼されている"],
+    bad:["間食の誘いには地味に冷たい","計画通りに食べられないと地味にストレスを感じる"],
+    food:"コース料理を3周分", reason:"間食せず三食に全力を注ぐあなたには、一食を丸ごと豪華にするコース料理が向いています。"},
+  MNGI:{emoji:"🎲", name:"気まぐれ美食デブ",
+    catch:"間食はしない。その日の気分が、すべてを決める。",
+    desc:"普段は間食せずあっさりしているが、いざ「今日はこれを食べたい」と思うと一気に量も気分も全開になる。計画はないが、その日の食欲のままに一食を全力で楽しむタイプ。",
+    good:["気分の波に合わせて新しい店を発掘するのが得意","食べる時の幸せそうな表情が周りを和ませる"],
+    bad:["前日に決めた予定が食欲で覆ることがある","「今日は普通でいいや」の日が突然なくなる"],
+    food:"季節限定の高カロリーパフェ", reason:"気の向くまま美味しいものを探すあなたには、期間限定・話題性のある一品がよく似合います。"},
+  MNBP:{emoji:"🏋️", name:"鍛え上げ戦士デブ",
+    catch:"間食を断ち、本番の食事で全てを出し切る。",
+    desc:"間食という無駄を一切省き、その分の体力をすべて三食にぶつける、いわば食事における体育会系。事前に「今日はどれだけ食べられるか」を見積もり、計画通りに完食することに小さな達成感を覚える。",
+    good:["自分を律する力が強く、ストイックに見える","目標を決めたら最後までやり遂げる"],
+    bad:["間食を勧められても頑なに断ってしまう","完食できなかった日は妙に悔しがる"],
+    food:"厚切りトンカツ定食（ご飯おかわり無料）", reason:"無駄な間食を省き、本番の食事で勝負するあなたには、ご飯おかわり自由の定食が最適です。"},
+  MNBI:{emoji:"🐗", name:"野生ハンターデブ",
+    catch:"間食はしない。狩りは三食で十分。",
+    desc:"間食には頼らず、三食という限られたチャンスで本能的に量を狩りに行くタイプ。計画はあまりないが、目の前に満腹のチャンスがあれば絶対に逃さない、野生の勘を持つ食いしん坊。",
+    good:["シンプルで迷いがなく、決断が早い","「とりあえず食べてから考える」精神で行動力がある"],
+    bad:["勢いで頼みすぎて後半ペースが落ちる","間食でつなぐという選択肢が頭にない"],
+    food:"牛丼超特盛り", reason:"間食なしで一気に量を狩りに行くあなたには、シンプルかつ満腹度の高い超特盛りがハマります。"},
+  LSGP:{emoji:"☕", name:"計画派おやつデブ",
+    catch:"少量主義、されど間食には全力。",
+    desc:"一回の食事量は控えめだが、間食タイムだけは絶対に死守する。しかもただ食べるのではなく、事前にリサーチした美味しいおやつを「今日のご褒美」として計画的に楽しむ、ちょっと上品な食いしん坊。",
+    good:["少量でも満足できる、いい意味での自己管理力がある","おやつのセレクトに一貫したこだわりがある"],
+    bad:["楽しみにしていたおやつがないと地味にテンションが下がる","「今日のご褒美」が積み重なって気づけば毎日になっている"],
+    food:"高級生チョコレート（少量を毎日）", reason:"量より質、しかも計画的に楽しむあなたには、毎日少しずつ味わえる高級スイーツがぴったり。"},
+  LSGI:{emoji:"🍦", name:"自由気ままデブ",
+    catch:"少しずつ、でも気になる味は全部試したい。",
+    desc:"一度に食べる量は少ないが、間食への興味は尽きない。計画は立てず、気になる新作スイーツやお菓子があればその場で即購入。少量主義なのに、気づけば一日に何種類も味見していることがある。",
+    good:["新しいものへの好奇心が強く、話題のネタを持っている","少量ずつ楽しむのでフットワークが軽い"],
+    bad:["「ちょっとだけ」のつもりが何度も繰り返される","気になる新作を見ると予定を変えてでも買いに行く"],
+    food:"コンビニ新作スイーツ食べ比べ", reason:"気分で新しい味を探すあなたには、少量ずつ色々試せる新作スイーツの食べ比べが向いています。"},
+  LSBP:{emoji:"💰", name:"コスパ重視デブ",
+    catch:"間食こそ本番、コスパで選ぶ実力派。",
+    desc:"一回の食事は控えめだが、その分間食でしっかり満たす派。値段と量のバランスを常に計算し、「これだけ食べてこの値段なら最高」というラインを見極める、しっかり者のおやつ戦略家。",
+    good:["お得な情報や割引に詳しく、頼りにされる","計画的に間食を取り入れる自己管理力がある"],
+    bad:["セールやお得情報につい買いすぎてしまう","「安いから」で買ったお菓子のストックが増えがち"],
+    food:"ポテチ大袋＋から揚げ", reason:"間食をコスパ良く計画的に楽しむあなたには、安くて満足度の高い王道おつまみ系が最適です。"},
+  LSBI:{emoji:"🎈", name:"気分屋ばくばくデブ",
+    catch:"普段は控えめ、その分気分屋。",
+    desc:"基本は少量でこまめに食べる省エネ派だが、気分が乗ると一気にスイッチが入り、量を気にせず間食をばくばく食べ進める。普段とのギャップが大きく、周りを驚かせることもあるタイプ。",
+    good:["普段は控えめで一緒にいて気を遣わせない","テンションが上がった時の食べっぷりが周りを笑顔にする"],
+    bad:["気分の上下で食欲の差が激しい","「今日は特別」の日が思った以上に多い"],
+    food:"アイス1パック一気食い", reason:"気分の波で食欲が変わるあなたには、気が向いた時に一気にいけるアイスがぴったりです。"},
+  LNGP:{emoji:"🌸", name:"上品グルメデブ",
+    catch:"量より質、すべて計算済みの上品派。",
+    desc:"食べる量は少なめ、間食もしない代わりに、一口一口の質には強くこだわる。事前にお店や食材をリサーチし、限られた量を最大限楽しむための計画を立てる、いわば食の品評家タイプ。",
+    good:["少量でも満足度を引き出すセンスがある","食事の場の雰囲気づくりが丁寧で上手"],
+    bad:["こだわりが強すぎて選ぶのに時間がかかる","量より質を求めるあまり値段が高くなりがち"],
+    food:"バターたっぷりの高級トースト", reason:"少量でも満足度を求めるあなたには、一口の濃厚さで満たされる高カロリートーストが向いています。"},
+  LNGI:{emoji:"🚶", name:"ふらり美食デブ",
+    catch:"決め事は苦手、ふらっと美味しいものを探す。",
+    desc:"量も間食も控えめだが、気分次第でふらっと外に出て、その時目についた美味しそうなものを楽しむ自由人。計画は立てないが、結果的に「いい店」をふらりと見つけてしまう不思議な引きを持つ。",
+    good:["フットワークが軽く、気軽に誘いやすい","偶然いい店を見つける運の良さがある"],
+    bad:["事前の予定が当日の気分で変わりやすい","「決めて」と言われると意外と困ってしまう"],
+    food:"食べ歩きクレープ＋ジェラート", reason:"思いつきで美味しいものを探すあなたには、街をふらっと歩きながら楽しむ食べ歩きグルメが似合います。"},
+  LNBP:{emoji:"📋", name:"堅実戦略デブ",
+    catch:"少なめの食事を、最大効率で満腹に変える。",
+    desc:"量は控えめ、間食もしない中で、いかに効率よく満腹感を得るかを常に計算している堅実派。事前に「これを食べればしっかり満たされる」というメニューを見極めて選ぶ、地味だが安定感のあるタイプ。",
+    good:["無駄を省く判断力があり、計画通りに物事を進められる","少ない量でもきちんと満足できる切り替えの早さがある"],
+    bad:["効率を重視しすぎて食事の楽しみを後回しにしがち","予定外の誘いには少し腰が重い"],
+    food:"高カロリー弁当（から揚げ＋マヨ多め）", reason:"少なめの食事でしっかり満足したいあなたには、効率よく満腹になれる濃厚弁当がおすすめです。"},
+  LNBI:{emoji:"🛋️", name:"マイペース満腹デブ",
+    catch:"普段は控えめ、たまに本気で満腹になる。",
+    desc:"普段は量も間食も控えめなマイペース派だが、気が向いた時だけ「今日は満腹になるまで食べる」と一気にスイッチが入る。計画はなく、その日の気分で食べる量が大きく変わる、振れ幅が魅力のタイプ。",
+    good:["普段は省エネで一緒にいて落ち着く","たまに見せる本気の食べっぷりが愛される"],
+    bad:["「今日は特別」のラインが読めない","急にスイッチが入ると周りが驚く"],
+    food:"自宅で作る激盛りパスタ", reason:"普段は控えめでも気が向いた時は全力なあなたには、家で気の済むまで作れる激盛りパスタが向いています。"}
+};
+
+const axisInfo = {
+  ML:{label:"食欲", a:"M", b:"L"},
+  SN:{label:"間食", a:"S", b:"N"},
+  GB:{label:"こだわり", a:"G", b:"B"},
+  PI:{label:"計画性", a:"P", b:"I"}
+};
+
+let order = [];
+let current = 0;
+let scores = {};
+
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+
+function startQuiz(){
+  order = questions.map((q,i)=>i);
+  current = 0;
+  scores = {M:0,L:0,S:0,N:0,G:0,B:0,P:0,I:0};
+  show("screen-quiz");
+  renderQuestion();
+}
+
+function renderQuestion(){
+  const q = questions[order[current]];
+  document.getElementById("q-count").textContent = (current+1) + " / " + questions.length;
+  document.getElementById("progress-bar").style.width = ((current)/questions.length*100) + "%";
+  document.getElementById("q-text").textContent = q.text;
+  const choicesEl = document.getElementById("choices");
+  choicesEl.innerHTML = "";
+  likertOptions.forEach(opt=>{
+    const btn = document.createElement("button");
+    btn.className = "choice";
+    btn.textContent = opt.label;
+    btn.onclick = ()=>answer(q, opt);
+    choicesEl.appendChild(btn);
+  });
+}
+
+function answer(q, opt){
+  const letter = opt.dir === "a" ? q.a : q.b;
+  scores[letter] += opt.weight;
+  current++;
+  if(current >= questions.length){
+    document.getElementById("progress-bar").style.width = "100%";
+    setTimeout(showResult, 200);
+  } else {
+    renderQuestion();
+  }
+}
+
+function showResult(){
+  const code = (scores.M>=scores.L?"M":"L") +
+               (scores.S>=scores.N?"S":"N") +
+               (scores.G>=scores.B?"G":"B") +
+               (scores.P>=scores.I?"P":"I");
+  const t = types[code];
+  document.getElementById("result-emoji").textContent = t.emoji;
+  document.getElementById("result-code").textContent = "デブBTI: " + code;
+  document.getElementById("result-name").textContent = t.name;
+  document.getElementById("result-catch").textContent = "「" + t.catch + "」";
+  document.getElementById("result-desc").textContent = t.desc;
+  document.getElementById("result-food-name").textContent = t.food;
+  document.getElementById("result-food-reason").textContent = t.reason;
+
+  const goodEl = document.getElementById("result-good");
+  goodEl.innerHTML = t.good.map(li=>`<li>${li}</li>`).join("");
+  const badEl = document.getElementById("result-bad");
+  badEl.innerHTML = t.bad.map(li=>`<li>${li}</li>`).join("");
+
+  const barsEl = document.getElementById("axis-bars");
+  barsEl.innerHTML = "";
+  Object.keys(axisInfo).forEach(key=>{
+    const info = axisInfo[key];
+    const aVal = scores[info.a], bVal = scores[info.b];
+    const total = aVal + bVal;
+    const pct = total ? (aVal/total*100) : 50;
+    const row = document.createElement("div");
+    row.className = "axis-row";
+    row.innerHTML = `
+      <div class="axis-label">${info.label} ${info.a}/${info.b}</div>
+      <div class="axis-track"><div class="axis-fill" style="width:${pct}%"></div></div>
+      <div style="width:38px;text-align:right;">${aVal}-${bVal}</div>
+    `;
+    barsEl.appendChild(row);
+  });
+
+  show("screen-result");
+}
+
+function restartQuiz(){
+  show("screen-intro");
+}
+
+function showAllTypes(){
+  const listEl = document.getElementById("alltypes-list");
+  listEl.innerHTML = "";
+  Object.keys(types).forEach(code=>{
+    const t = types[code];
+    const card = document.createElement("div");
+    card.className = "type-card";
+    card.innerHTML = `
+      <div class="tc-emoji">${t.emoji}</div>
+      <div class="tc-body">
+        <div class="tc-code">デブBTI: ${code}</div>
+        <div class="tc-name">${t.name}</div>
+        <div class="tc-catch">「${t.catch}」</div>
+        <div class="tc-desc">${t.desc}</div>
+        <div class="tc-food">🍽 ${t.food}</div>
+      </div>
+    `;
+    listEl.appendChild(card);
+  });
+  show("screen-alltypes");
+}
+
+function show(id){
+  document.querySelectorAll(".screen").forEach(el=>el.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+}
+</script>
+</body>
+</html>
