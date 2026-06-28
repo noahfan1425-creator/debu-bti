@@ -23,7 +23,7 @@
   body{
     margin:0;
     font-family:"M PLUS Rounded 1c","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif;
-    background:linear-gradient(180deg,#3d9be0 0%,#6ec3ee 40%,#bfe6f7 75%,#e3f4fb 100%);
+    background:linear-gradient(180deg,#0f6faf 0%,#2b8dcc 28%,#52b2e8 58%,#9aceed 83%,#c2e2f5 100%);
     min-height:100vh;
     display:flex;
     align-items:center;
@@ -124,16 +124,24 @@
     position:absolute;
     left:0;right:0;bottom:0;
     height:60px;
-    background:#6b7280;
-    border-top:3px solid var(--ink);
+    background:#4a4a4a;
+    border-top:3px solid #2a2a2a;
   }
   .road .line{
     position:absolute;
-    top:50%;
-    height:5px;
-    width:36px;
-    background:#fff3c4;
-    border-radius:2px;
+    top:0;bottom:0;
+    width:3px;
+    height:auto;
+    background:rgba(255,255,255,0.3);
+    border-radius:0;
+  }
+  .bg-green-strip{
+    position:absolute;
+    left:0;right:0;
+    bottom:60px;
+    height:28px;
+    background:linear-gradient(180deg,#68c050 0%,#3a8a26 100%);
+    border-top:2px solid rgba(0,0,0,0.18);
   }
   .bg-decor{
     position:fixed;
@@ -236,11 +244,11 @@
     position:fixed;
     inset:0;
     z-index:0;
-    background:linear-gradient(180deg,#3d9be0 0%,#6ec3ee 40%,#bfe6f7 75%,#e3f4fb 100%);
+    background:transparent;
     display:none;
-    align-items:center;
+    align-items:flex-end;
     justify-content:center;
-    padding:20px;
+    padding:0 20px 62px;
   }
   #shop2d-fullscreen.active{display:flex;}
   .shop2d-scene{
@@ -939,6 +947,8 @@
   /* === In-N-Out Burger style shop front === */
   .shop-front-2d.inn-style{
     background:#f5f0e8;
+    border:none;
+    box-shadow:none;
   }
   /* Pole sign (replaces nobori) */
   .inn-pole-sign{
@@ -1229,37 +1239,65 @@
   <div class="cloud" style="top:14%; left:60%; width:120px; height:36px; animation-duration:70s; animation-delay:-20s;"></div>
   <div class="cloud" style="top:24%; left:35%; width:70px; height:24px; animation-duration:45s; animation-delay:-10s;"></div>
   <div class="skyline">
-    <div class="building" style="left:2%; width:11%; height:55px; --shop:#fbdca0; --awn-a:#d62828; --awn-b:#fff;">
-      <div class="awning"></div><div class="shop-window"></div><div class="mini-sign">🍕</div>
+    <div class="palm" style="left:3%;">
+      <div class="trunk" style="height:72px;"></div>
+      <div class="leaf" style="bottom:64px;transform:rotate(-28deg);left:-14px;"></div>
+      <div class="leaf" style="bottom:61px;transform:rotate(12deg);left:-5px;"></div>
+      <div class="leaf" style="bottom:59px;transform:rotate(50deg);left:3px;"></div>
     </div>
-    <div class="building" style="left:14%; width:9%; height:80px; --shop:#d8c3a5; --awn-a:#5b3a24; --awn-b:#e8d9c4;">
-      <div class="awning"></div><div class="shop-window"></div><div class="mini-sign">☕</div>
+    <div class="palm" style="left:13%;">
+      <div class="trunk" style="height:54px;"></div>
+      <div class="leaf" style="bottom:46px;transform:rotate(-25deg);left:-14px;"></div>
+      <div class="leaf" style="bottom:43px;transform:rotate(15deg);left:-6px;"></div>
+      <div class="leaf" style="bottom:41px;transform:rotate(55deg);left:2px;"></div>
     </div>
-    <div class="building" style="left:24%; width:13%; height:42px; --shop:#ffd9ec; --awn-a:#ff8fc2; --awn-b:#fff;">
-      <div class="awning"></div><div class="shop-window"></div><div class="mini-sign">🍩</div>
+    <div class="palm" style="left:23%;">
+      <div class="trunk" style="height:82px;"></div>
+      <div class="leaf" style="bottom:74px;transform:rotate(-30deg);left:-14px;"></div>
+      <div class="leaf" style="bottom:71px;transform:rotate(10deg);left:-6px;"></div>
+      <div class="leaf" style="bottom:69px;transform:rotate(48deg);left:2px;"></div>
     </div>
-    <div class="palm" style="left:39%;"><div class="trunk"></div><div class="leaf" style="transform:rotate(-25deg); left:-14px;"></div><div class="leaf" style="transform:rotate(15deg); left:-6px;"></div><div class="leaf" style="transform:rotate(55deg); left:2px;"></div></div>
-    <div class="building" style="left:45%; width:10%; height:65px; --shop:#f3e3c4; --awn-a:#c0392b; --awn-b:#222;">
-      <div class="awning"></div><div class="shop-window"></div><div class="mini-sign">🍜</div>
+    <div class="palm" style="left:36%;">
+      <div class="trunk" style="height:62px;"></div>
+      <div class="leaf" style="bottom:54px;transform:rotate(-22deg);left:-14px;"></div>
+      <div class="leaf" style="bottom:51px;transform:rotate(16deg);left:-6px;"></div>
+      <div class="leaf" style="bottom:49px;transform:rotate(54deg);left:2px;"></div>
     </div>
-    <div class="building" style="left:56%; width:14%; height:48px; --shop:#ffe1ad; --awn-a:#f2a93b; --awn-b:#fff7e6;">
-      <div class="awning"></div><div class="shop-window"></div><div class="mini-sign">🌮</div>
+    <div class="palm" style="left:50%;">
+      <div class="trunk" style="height:78px;"></div>
+      <div class="leaf" style="bottom:70px;transform:rotate(-28deg);left:-14px;"></div>
+      <div class="leaf" style="bottom:67px;transform:rotate(14deg);left:-6px;"></div>
+      <div class="leaf" style="bottom:65px;transform:rotate(50deg);left:2px;"></div>
     </div>
-    <div class="building" style="left:71%; width:9%; height:75px; --shop:#cdeee3; --awn-a:#4fb89a; --awn-b:#fff;">
-      <div class="awning"></div><div class="shop-window"></div><div class="mini-sign">🍦</div>
+    <div class="palm" style="left:63%;">
+      <div class="trunk" style="height:58px;"></div>
+      <div class="leaf" style="bottom:50px;transform:rotate(-20deg);left:-14px;"></div>
+      <div class="leaf" style="bottom:47px;transform:rotate(18deg);left:-6px;"></div>
+      <div class="leaf" style="bottom:45px;transform:rotate(52deg);left:2px;"></div>
     </div>
-    <div class="palm" style="left:83%;"><div class="trunk"></div><div class="leaf" style="transform:rotate(-25deg); left:-14px;"></div><div class="leaf" style="transform:rotate(15deg); left:-6px;"></div><div class="leaf" style="transform:rotate(55deg); left:2px;"></div></div>
-    <div class="building" style="left:89%; width:11%; height:58px; --shop:#fff3b0; --awn-a:#d62828; --awn-b:#ffce00;">
-      <div class="awning"></div><div class="shop-window"></div><div class="mini-sign">🍔</div>
+    <div class="palm" style="left:76%;">
+      <div class="trunk" style="height:86px;"></div>
+      <div class="leaf" style="bottom:78px;transform:rotate(-32deg);left:-14px;"></div>
+      <div class="leaf" style="bottom:75px;transform:rotate(8deg);left:-6px;"></div>
+      <div class="leaf" style="bottom:73px;transform:rotate(46deg);left:2px;"></div>
+    </div>
+    <div class="palm" style="left:88%;">
+      <div class="trunk" style="height:66px;"></div>
+      <div class="leaf" style="bottom:58px;transform:rotate(-26deg);left:-14px;"></div>
+      <div class="leaf" style="bottom:55px;transform:rotate(14deg);left:-6px;"></div>
+      <div class="leaf" style="bottom:53px;transform:rotate(52deg);left:2px;"></div>
     </div>
   </div>
+  <div class="bg-green-strip"></div>
   <div class="road">
-    <div class="line" style="left:5%;"></div>
-    <div class="line" style="left:22%;"></div>
-    <div class="line" style="left:39%;"></div>
+    <div class="line" style="left:8%;"></div>
+    <div class="line" style="left:20%;"></div>
+    <div class="line" style="left:32%;"></div>
+    <div class="line" style="left:44%;"></div>
     <div class="line" style="left:56%;"></div>
-    <div class="line" style="left:73%;"></div>
-    <div class="line" style="left:90%;"></div>
+    <div class="line" style="left:68%;"></div>
+    <div class="line" style="left:80%;"></div>
+    <div class="line" style="left:92%;"></div>
   </div>
 </div>
 <div id="shop2d-fullscreen" class="active" aria-label="ドアを開けて入店する">
