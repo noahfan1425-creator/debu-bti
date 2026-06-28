@@ -935,6 +935,171 @@
     transform:translate(4px,5px);
     box-shadow:0 0 0 var(--ink);
   }
+
+  /* === In-N-Out Burger style shop front === */
+  .shop-front-2d.inn-style{
+    background:#f5f0e8;
+  }
+  /* Pole sign (replaces nobori) */
+  .inn-pole-sign{
+    position:absolute;
+    left:-84px;
+    bottom:0;
+    width:68px;
+    z-index:4;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    cursor:pointer;
+  }
+  .inn-sign-board{
+    background:#da291c;
+    border:3px solid var(--ink);
+    border-radius:5px;
+    padding:9px 10px;
+    text-align:center;
+    box-shadow:3px 4px 0 var(--ink);
+    position:relative;
+    width:64px;
+  }
+  .inn-sign-brand{
+    font-family:"Mochiy Pop One",sans-serif;
+    font-size:0.88em;
+    color:#ffd200;
+    font-weight:800;
+    line-height:1.25;
+    text-shadow:1px 1px 0 rgba(0,0,0,0.5);
+  }
+  .inn-sign-divider{
+    height:2px;
+    background:rgba(255,210,0,0.45);
+    margin:5px 0;
+  }
+  .inn-sign-sub{
+    font-size:0.58em;
+    color:#fff;
+    font-weight:700;
+    letter-spacing:2px;
+  }
+  .inn-sign-arrow-r{
+    position:absolute;
+    right:-20px;
+    top:50%;
+    transform:translateY(-50%);
+    width:0;height:0;
+    border-top:14px solid transparent;
+    border-bottom:14px solid transparent;
+    border-left:20px solid #ffd200;
+    filter:drop-shadow(2px 1px 0 var(--ink));
+  }
+  .inn-pole{
+    width:7px;
+    height:158px;
+    background:linear-gradient(90deg,#888 0%,#ddd 35%,#aaa 70%,#777 100%);
+    border:2px solid var(--ink);
+    border-top:none;
+    border-radius:0 0 3px 3px;
+  }
+  /* Roof: Spanish tile gable */
+  .inn-roof-wrap{
+    position:relative;
+    height:68px;
+    background:#f5f0e8;
+    border-bottom:2px solid var(--ink);
+  }
+  .inn-roof-triangle{
+    position:absolute;
+    left:4%;right:4%;top:0;bottom:0;
+  }
+  .inn-roof-triangle::before{
+    content:"";
+    position:absolute;
+    inset:-4px;
+    background:var(--ink);
+    clip-path:polygon(50% 0%,100% 100%,0% 100%);
+  }
+  .inn-roof-triangle::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background-color:#bf5228;
+    background-image:
+      repeating-radial-gradient(circle at 10px -5px, transparent 0 6px, rgba(0,0,0,0.22) 6px 7px),
+      linear-gradient(170deg,#d87040 0%,#b04020 100%);
+    background-size:20px 13px, 100% 100%;
+    clip-path:polygon(50% 0%,100% 100%,0% 100%);
+  }
+  .inn-roof-coping{
+    height:11px;
+    background:#bf5228;
+    border-bottom:3px solid var(--ink);
+    background-image:repeating-linear-gradient(90deg,
+      rgba(255,255,255,0.18) 0 2px,
+      transparent 2px 9px,
+      rgba(0,0,0,0.22) 9px 11px,
+      transparent 11px 20px
+    );
+  }
+  /* Wall with arrow sign */
+  .inn-wall{
+    background:#f5f0e8;
+    padding:11px 18px 13px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-bottom:2px solid var(--ink);
+  }
+  .inn-building-arrow{
+    background:#ffd200;
+    border:3px solid var(--ink);
+    padding:8px 28px 8px 14px;
+    box-shadow:3px 4px 0 var(--ink);
+    clip-path:polygon(0% 0%,80% 0%,100% 50%,80% 100%,0% 100%);
+    font-family:"Mochiy Pop One",sans-serif;
+    font-size:1.3em;
+    color:#da291c;
+    font-weight:800;
+    letter-spacing:2px;
+  }
+  /* Awning: red + white polka-dot scalloped valance */
+  .inn-awning{
+    height:20px;
+    background:#da291c;
+    border-top:2px solid var(--ink);
+  }
+  .inn-awning-valance{
+    height:12px;
+    background:#fff;
+    border-bottom:3px solid var(--ink);
+    background-image:radial-gradient(circle,#da291c 38%,transparent 38%);
+    background-size:13px 12px;
+    background-position:6px 0;
+  }
+  /* Low planter with bushes */
+  .inn-planter{
+    height:20px;
+    background:linear-gradient(180deg,#c8b89a,#b0a082);
+    border-top:3px solid var(--ink);
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-evenly;
+    padding:0 18px;
+  }
+  .inn-bush{
+    width:36px;
+    height:28px;
+    background:radial-gradient(ellipse at 40% 35%,#5aaa48,#2e7a20);
+    border:2px solid var(--ink);
+    border-radius:55% 55% 35% 35%;
+    margin-top:-16px;
+    box-shadow:2px 3px 0 rgba(0,0,0,0.2);
+  }
+  .inn-sidewalk{
+    height:16px;
+    background:#ccc8c0;
+    border-bottom:3px solid var(--ink);
+  }
+
   #screen-alltypes{
     font-family:"Courier Prime",monospace;
     color:#2d1b0e;
@@ -1099,19 +1264,23 @@
 </div>
 <div id="shop2d-fullscreen" class="active" aria-label="ドアを開けて入店する">
   <div class="shop2d-scene">
-    <div class="nobori-2d">
-      <div class="pole"></div>
-      <div class="flag" onclick="enterShop()">ドアをクリック</div>
-    </div>
-    <div class="shop-front-2d">
-      <div class="roof-peak"><div class="roof-triangle"></div></div>
-      <div class="roof-trim"></div>
-      <div class="wall-top">
-        <div class="arrow-logo"></div>
-        <span class="sign-text">デブBTI</span>
+    <!-- In-N-Out style pole sign (left) -->
+    <div class="inn-pole-sign" onclick="enterShop()" role="button" aria-label="ドアを開けて入店する">
+      <div class="inn-sign-board">
+        <div class="inn-sign-brand">デブBTI</div>
+        <div class="inn-sign-divider"></div>
+        <div class="inn-sign-sub">BURGER</div>
+        <div class="inn-sign-arrow-r"></div>
       </div>
-      <div class="awning"></div>
-      <div class="awning-valance"></div>
+      <div class="inn-pole"></div>
+    </div>
+    <!-- In-N-Out style building -->
+    <div class="shop-front-2d inn-style">
+      <div class="inn-roof-wrap"><div class="inn-roof-triangle"></div></div>
+      <div class="inn-roof-coping"></div>
+      <div class="inn-wall"><div class="inn-building-arrow">デブBTI</div></div>
+      <div class="inn-awning"></div>
+      <div class="inn-awning-valance"></div>
       <div id="shop-doors" onclick="enterShop()" role="button" aria-label="ドアを開けて入店する">
         <div class="storefront-window"></div>
         <div class="door-glow"></div>
@@ -1120,14 +1289,15 @@
         <div class="door door-r"><span class="handle"></span></div>
         <div class="storefront-window"></div>
       </div>
-      <div class="wainscot">
-        <div class="bollard" style="left:26%;"></div>
-        <div class="bollard" style="left:38%;"></div>
-        <div class="bollard" style="left:62%;"></div>
+      <div class="inn-planter">
+        <div class="inn-bush"></div>
+        <div class="inn-bush"></div>
+        <div class="inn-bush"></div>
+        <div class="inn-bush"></div>
       </div>
-      <div class="curb-2d"></div>
-      <div class="floor-2d"></div>
+      <div class="inn-sidewalk"></div>
     </div>
+    <!-- Palm tree (right) -->
     <div class="palm-2d">
       <div class="trunk"></div>
       <div class="leaf" style="transform:rotate(-55deg); left:-36px;"></div>
