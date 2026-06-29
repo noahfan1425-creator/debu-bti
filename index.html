@@ -42,19 +42,13 @@
   }
   .cloud{
     position:absolute;
-    background:#fff;
-    border-radius:50px;
-    opacity:0.9;
     animation:driftCloud linear infinite;
   }
-  .cloud::before, .cloud::after{
-    content:"";
-    position:absolute;
-    background:#fff;
-    border-radius:50%;
+  .cloud img{
+    width:100%;
+    height:auto;
+    display:block;
   }
-  .cloud::before{width:55%;height:90%;top:-45%;left:8%;}
-  .cloud::after{width:45%;height:75%;top:-35%;right:10%;}
   @keyframes driftCloud{
     0%{transform:translateX(-120px);}
     100%{transform:translateX(calc(100vw + 120px));}
@@ -1259,9 +1253,15 @@
 <div id="flash-overlay" aria-hidden="true"></div>
 <div class="cityscape" aria-hidden="true">
   <img src="cessna.png" class="cessna" alt="">
-  <div class="cloud" style="top:6%; left:10%; width:90px; height:30px; animation-duration:55s;"></div>
-  <div class="cloud" style="top:14%; left:60%; width:120px; height:36px; animation-duration:70s; animation-delay:-20s;"></div>
-  <div class="cloud" style="top:24%; left:35%; width:70px; height:24px; animation-duration:45s; animation-delay:-10s;"></div>
+  <div class="cloud" style="top:2%; left:-5%; width:340px; animation-duration:80s; opacity:0.95;">
+    <img src="nyudo_cloud.png" alt="">
+  </div>
+  <div class="cloud" style="top:5%; left:55%; width:260px; animation-duration:65s; animation-delay:-30s; opacity:0.85;">
+    <img src="nyudo_cloud.png" alt="">
+  </div>
+  <div class="cloud" style="top:10%; left:30%; width:200px; animation-duration:95s; animation-delay:-50s; opacity:0.75;">
+    <img src="nyudo_cloud.png" alt="">
+  </div>
   <div class="skyline">
     <div class="palm" style="left:3%;">
       <div class="trunk" style="height:72px;"></div>
