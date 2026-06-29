@@ -59,6 +59,16 @@
     0%{transform:translateX(-120px);}
     100%{transform:translateX(calc(100vw + 120px));}
   }
+  .cessna{
+    position:absolute;
+    width:560px;
+    top:12%;
+    animation:cessnaFly 38s linear infinite;
+  }
+  @keyframes cessnaFly{
+    0%  {left:-580px;}
+    100%{left:calc(100vw + 20px);}
+  }
   .skyline{
     position:absolute;
     left:0;right:0;bottom:60px;
@@ -248,13 +258,25 @@
     display:none;
     align-items:flex-end;
     justify-content:center;
-    padding:0 20px 62px;
+    padding:0 0 60px;
   }
   #shop2d-fullscreen.active{display:flex;}
   .shop2d-scene{
     position:relative;
-    width:min(80vw,460px);
+    width:min(92vw,680px);
   }
+  .shop-img-wrap{
+    position:relative;
+    width:100%;
+    cursor:pointer;
+    filter:drop-shadow(0 8px 32px rgba(0,0,0,0.4));
+  }
+  .shop-img{
+    width:100%;
+    height:auto;
+    display:block;
+  }
+  /* CSSドアオーバーレイ */
   @keyframes suckIn2D{
     0%{transform:scale(1); opacity:1;}
     40%{transform:scale(1.8); opacity:1;}
@@ -358,7 +380,7 @@
   #shop-doors{
     position:relative;
     height:118px;
-    background:#cfeaf2;
+    background:#7aafc4;
     display:flex;
     align-items:flex-end;
     justify-content:center;
@@ -372,7 +394,7 @@
   .storefront-window{
     flex:1;
     align-self:stretch;
-    background:linear-gradient(180deg,#dff3fa,#bfe3f0);
+    background:linear-gradient(180deg,#8bbfd8,#5d9ab8);
     border:3px solid var(--ink);
     margin:0 1px;
     min-width:10px;
@@ -965,12 +987,12 @@
   .inn-sign-board{
     background:#da291c;
     border:3px solid var(--ink);
-    border-radius:5px;
-    padding:9px 10px;
+    border-radius:6px;
+    padding:8px 10px 6px;
     text-align:center;
     box-shadow:3px 4px 0 var(--ink);
     position:relative;
-    width:64px;
+    width:66px;
   }
   .inn-sign-brand{
     font-family:"Mochiy Pop One",sans-serif;
@@ -983,7 +1005,7 @@
   .inn-sign-divider{
     height:2px;
     background:rgba(255,210,0,0.45);
-    margin:5px 0;
+    margin:4px 0;
   }
   .inn-sign-sub{
     font-size:0.58em;
@@ -991,20 +1013,23 @@
     font-weight:700;
     letter-spacing:2px;
   }
+  /* 矢印を看板の下に独立して配置 */
   .inn-sign-arrow-r{
-    position:absolute;
-    right:-20px;
-    top:50%;
-    transform:translateY(-50%);
-    width:0;height:0;
-    border-top:14px solid transparent;
-    border-bottom:14px solid transparent;
-    border-left:20px solid #ffd200;
-    filter:drop-shadow(2px 1px 0 var(--ink));
+    position:relative;
+    right:auto;
+    top:auto;
+    transform:none;
+    margin:5px auto 0;
+    width:52px;
+    height:22px;
+    background:#ffd200;
+    border:2px solid var(--ink);
+    clip-path:polygon(0% 0%,75% 0%,100% 50%,75% 100%,0% 100%);
+    box-shadow:2px 3px 0 var(--ink);
   }
   .inn-pole{
     width:7px;
-    height:158px;
+    height:148px;
     background:linear-gradient(90deg,#888 0%,#ddd 35%,#aaa 70%,#777 100%);
     border:2px solid var(--ink);
     border-top:none;
@@ -1053,7 +1078,7 @@
   /* Wall with arrow sign */
   .inn-wall{
     background:#f5f0e8;
-    padding:11px 18px 13px;
+    padding:14px 22px 16px;
     display:flex;
     align-items:center;
     justify-content:center;
@@ -1062,28 +1087,26 @@
   .inn-building-arrow{
     background:#ffd200;
     border:3px solid var(--ink);
-    padding:8px 28px 8px 14px;
-    box-shadow:3px 4px 0 var(--ink);
-    clip-path:polygon(0% 0%,80% 0%,100% 50%,80% 100%,0% 100%);
+    padding:12px 42px 12px 18px;
+    box-shadow:4px 5px 0 var(--ink);
+    clip-path:polygon(0% 0%,78% 0%,100% 50%,78% 100%,0% 100%);
     font-family:"Mochiy Pop One",sans-serif;
-    font-size:1.3em;
-    color:#da291c;
+    font-size:1.55em;
+    color:#fff;
     font-weight:800;
     letter-spacing:2px;
+    text-shadow:2px 2px 0 #da291c,-1px -1px 0 #b01010;
   }
-  /* Awning: red + white polka-dot scalloped valance */
+  /* Awning: solid red band, simple stripe trim */
   .inn-awning{
-    height:20px;
+    height:22px;
     background:#da291c;
     border-top:2px solid var(--ink);
   }
   .inn-awning-valance{
-    height:12px;
-    background:#fff;
+    height:8px;
+    background:repeating-linear-gradient(90deg,#da291c 0 10px,#fff 10px 13px);
     border-bottom:3px solid var(--ink);
-    background-image:radial-gradient(circle,#da291c 38%,transparent 38%);
-    background-size:13px 12px;
-    background-position:6px 0;
   }
   /* Low planter with bushes */
   .inn-planter{
@@ -1235,6 +1258,7 @@
 <body>
 <div id="flash-overlay" aria-hidden="true"></div>
 <div class="cityscape" aria-hidden="true">
+  <img src="cessna.png" class="cessna" alt="">
   <div class="cloud" style="top:6%; left:10%; width:90px; height:30px; animation-duration:55s;"></div>
   <div class="cloud" style="top:14%; left:60%; width:120px; height:36px; animation-duration:70s; animation-delay:-20s;"></div>
   <div class="cloud" style="top:24%; left:35%; width:70px; height:24px; animation-duration:45s; animation-delay:-10s;"></div>
@@ -1302,47 +1326,8 @@
 </div>
 <div id="shop2d-fullscreen" class="active" aria-label="ドアを開けて入店する">
   <div class="shop2d-scene">
-    <!-- In-N-Out style pole sign (left) -->
-    <div class="inn-pole-sign" onclick="enterShop()" role="button" aria-label="ドアを開けて入店する">
-      <div class="inn-sign-board">
-        <div class="inn-sign-brand">デブBTI</div>
-        <div class="inn-sign-divider"></div>
-        <div class="inn-sign-sub">BURGER</div>
-        <div class="inn-sign-arrow-r"></div>
-      </div>
-      <div class="inn-pole"></div>
-    </div>
-    <!-- In-N-Out style building -->
-    <div class="shop-front-2d inn-style">
-      <div class="inn-roof-wrap"><div class="inn-roof-triangle"></div></div>
-      <div class="inn-roof-coping"></div>
-      <div class="inn-wall"><div class="inn-building-arrow">デブBTI</div></div>
-      <div class="inn-awning"></div>
-      <div class="inn-awning-valance"></div>
-      <div id="shop-doors" onclick="enterShop()" role="button" aria-label="ドアを開けて入店する">
-        <div class="storefront-window"></div>
-        <div class="door-glow"></div>
-        <div class="open-sign">OPEN</div>
-        <div class="door door-l"><span class="handle"></span></div>
-        <div class="door door-r"><span class="handle"></span></div>
-        <div class="storefront-window"></div>
-      </div>
-      <div class="inn-planter">
-        <div class="inn-bush"></div>
-        <div class="inn-bush"></div>
-        <div class="inn-bush"></div>
-        <div class="inn-bush"></div>
-      </div>
-      <div class="inn-sidewalk"></div>
-    </div>
-    <!-- Palm tree (right) -->
-    <div class="palm-2d">
-      <div class="trunk"></div>
-      <div class="leaf" style="transform:rotate(-55deg); left:-36px;"></div>
-      <div class="leaf" style="transform:rotate(-20deg); left:-24px;"></div>
-      <div class="leaf" style="transform:rotate(15deg); left:-10px;"></div>
-      <div class="leaf" style="transform:rotate(48deg); left:2px;"></div>
-      <div class="leaf" style="transform:rotate(80deg); left:10px;"></div>
+    <div class="shop-img-wrap" onclick="enterShop()" role="button" aria-label="ドアを開けて入店する">
+      <img src="shopmae.png" class="shop-img" id="shop-img-main" alt="デブBTI BURGER">
     </div>
   </div>
 </div>
@@ -1638,27 +1623,36 @@ function shuffle(arr){
 
 const foodPellets = ["🍙","🍕","🍔","🍰","🍩","🍟","🍗","🍫","🍪","🍦"];
 
+const _doorFrames = ["shopmae.png","shopmae_30.png","shopmae_60.png","shopmae_open.png"];
+_doorFrames.forEach(src=>{ const i=new Image(); i.src=src; });
+
 function enterShop(){
-  const doors = document.getElementById("shop-doors");
   const scene = document.querySelector(".shop2d-scene");
+  const img = document.getElementById("shop-img-main");
   const flash = document.getElementById("flash-overlay");
-  if(!doors || doors.classList.contains("open")) return;
-  doors.classList.add("open");
-  setTimeout(()=>{
-    const dRect = doors.getBoundingClientRect();
-    const sRect = scene.getBoundingClientRect();
-    const originX = ((dRect.left + dRect.width/2 - sRect.left) / sRect.width) * 100;
-    const originY = ((dRect.top + dRect.height/2 - sRect.top) / sRect.height) * 100;
-    scene.style.transformOrigin = originX + "% " + originY + "%";
-    scene.classList.add("sucking");
-    flash.classList.add("show");
-    setTimeout(()=>{
-      show("screen-intro");
-      scene.classList.remove("sucking");
-      scene.style.transformOrigin = "";
-      setTimeout(()=>flash.classList.remove("show"), 50);
-    }, 600);
-  }, 450);
+  if(scene.classList.contains("sucking") || img.dataset.opening) return;
+  img.dataset.opening = "1";
+  let frame = 1;
+  const interval = setInterval(()=>{
+    img.src = _doorFrames[frame];
+    frame++;
+    if(frame >= _doorFrames.length){
+      clearInterval(interval);
+      setTimeout(()=>{
+        scene.style.transformOrigin = "50% 78%";
+        scene.classList.add("sucking");
+        flash.classList.add("show");
+        setTimeout(()=>{
+          show("screen-intro");
+          scene.classList.remove("sucking");
+          scene.style.transformOrigin = "";
+          img.src = "shopmae.png";
+          delete img.dataset.opening;
+          setTimeout(()=>flash.classList.remove("show"), 50);
+        }, 600);
+      }, 150);
+    }
+  }, 120);
 }
 
 function startQuiz(){
