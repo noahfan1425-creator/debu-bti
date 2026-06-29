@@ -58,6 +58,7 @@
     width:560px;
     top:12%;
     animation:cessnaFly 38s linear infinite;
+    z-index:2;
   }
   @keyframes cessnaFly{
     0%  {left:-580px;}
@@ -1252,16 +1253,10 @@
 <body>
 <div id="flash-overlay" aria-hidden="true"></div>
 <div class="cityscape" aria-hidden="true">
+  <div class="cloud" style="top:2%; left:-5%; width:480px; animation-duration:80s; opacity:0.95;">
+    <img src="nyudo_cloud.png" alt="">
+  </div>
   <img src="cessna.png" class="cessna" alt="">
-  <div class="cloud" style="top:2%; left:-5%; width:340px; animation-duration:80s; opacity:0.95;">
-    <img src="nyudo_cloud.png" alt="">
-  </div>
-  <div class="cloud" style="top:5%; left:55%; width:260px; animation-duration:65s; animation-delay:-30s; opacity:0.85;">
-    <img src="nyudo_cloud.png" alt="">
-  </div>
-  <div class="cloud" style="top:10%; left:30%; width:200px; animation-duration:95s; animation-delay:-50s; opacity:0.75;">
-    <img src="nyudo_cloud.png" alt="">
-  </div>
   <div class="skyline">
     <div class="palm" style="left:3%;">
       <div class="trunk" style="height:72px;"></div>
