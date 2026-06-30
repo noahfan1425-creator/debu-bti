@@ -33,6 +33,15 @@
     position:relative;
     overflow-x:hidden;
   }
+  .interior-bg{
+    position:fixed;
+    inset:0;
+    z-index:0;
+    background:#e9ddc5 url("内装.png") center center / cover no-repeat;
+    display:none;
+  }
+  body.inside .interior-bg{ display:block; }
+  body.inside .cityscape{ display:none; }
   .cityscape{
     position:fixed;
     inset:0;
@@ -1458,6 +1467,7 @@
 </head>
 <body>
 <div id="flash-overlay" aria-hidden="true"></div>
+<div class="interior-bg" aria-hidden="true"></div>
 <div class="cityscape" aria-hidden="true">
   <div class="cloud" style="top:2%; left:-5%; width:480px; animation-duration:80s; opacity:0.95;">
     <img src="nyudo_cloud.png" alt="">
@@ -1921,6 +1931,7 @@ function show(id){
   const _c = document.querySelector(".container");
   _c.classList.toggle("building-mode", id === "screen-title");
   _c.classList.toggle("intro-mode", id === "screen-intro");
+  document.body.classList.toggle("inside", id !== "screen-title");
   const fullscreen2d = document.getElementById("shop2d-fullscreen");
   if(fullscreen2d) fullscreen2d.classList.toggle("active", id === "screen-title");
 }
