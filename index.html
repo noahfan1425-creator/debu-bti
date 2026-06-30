@@ -251,12 +251,34 @@
     width:100%;
     cursor:pointer;
     filter:drop-shadow(0 8px 32px rgba(0,0,0,0.4));
+    perspective:1100px;
+    perspective-origin:59% 75%;
   }
   .shop-img{
     width:100%;
     height:auto;
     display:block;
   }
+  /* 3Dドア開閉（建物は固定、ドアだけ回転） */
+  .door-interior{
+    position:absolute;
+    left:50.661%; top:59.812%;
+    width:17.107%; height:31.855%;
+    background:url(door_interior.png) center/cover;
+    z-index:1;
+  }
+  .door-leaf{
+    position:absolute;
+    top:59.812%; height:31.855%;
+    width:8.520%;
+    z-index:2;
+    transition:transform .6s cubic-bezier(.45,.05,.25,1);
+  }
+  .door-leaf img{ width:100%; height:100%; display:block; }
+  .door-left{ left:50.661%; transform-origin:left center; }
+  .door-right{ left:59.181%; transform-origin:right center; }
+  .shop-img-wrap.dooropen .door-left{ transform:rotateY(105deg); }
+  .shop-img-wrap.dooropen .door-right{ transform:rotateY(-105deg); }
   /* CSSドアオーバーレイ */
   @keyframes suckIn2D{
     0%{transform:scale(1); opacity:1;}
@@ -1275,6 +1297,9 @@
   <div class="shop2d-scene">
     <div class="shop-img-wrap" onclick="enterShop()" role="button" aria-label="ドアを開けて入店する">
       <img src="shopmae.png" class="shop-img" id="shop-img-main" alt="デブBTI BURGER">
+      <div class="door-interior"></div>
+      <div class="door-leaf door-left"><img src="door_leaf_left.png" alt=""></div>
+      <div class="door-leaf door-right"><img src="door_leaf_right.png" alt=""></div>
     </div>
   </div>
 </div>
@@ -1524,36 +1549,29 @@ function shuffle(arr){
 
 const foodPellets = ["🍙","🍕","🍔","🍰","🍩","🍟","🍗","🍫","🍪","🍦"];
 
-const _doorFrames = ["shopmae.png","shopmae_15.png","shopmae_30.png","shopmae_45.png","shopmae_60.png","shopmae_75.png","shopmae_open.png"];
-_doorFrames.forEach(src=>{ const i=new Image(); i.src=src; });
+const foodPelletsPreload = ["door_leaf_left.png","door_leaf_right.png","door_interior.png"];
+foodPelletsPreload.forEach(src=>{ const i=new Image(); i.src=src; });
 
 function enterShop(){
   const scene = document.querySelector(".shop2d-scene");
-  const img = document.getElementById("shop-img-main");
+  const wrap = document.querySelector(".shop-img-wrap");
   const flash = document.getElementById("flash-overlay");
-  if(scene.classList.contains("sucking") || img.dataset.opening) return;
-  img.dataset.opening = "1";
-  let frame = 1;
-  const interval = setInterval(()=>{
-    img.src = _doorFrames[frame];
-    frame++;
-    if(frame >= _doorFrames.length){
-      clearInterval(interval);
-      setTimeout(()=>{
-        scene.style.transformOrigin = "50% 78%";
-        scene.classList.add("sucking");
-        flash.classList.add("show");
-        setTimeout(()=>{
-          show("screen-intro");
-          scene.classList.remove("sucking");
-          scene.style.transformOrigin = "";
-          img.src = "shopmae.png";
-          delete img.dataset.opening;
-          setTimeout(()=>flash.classList.remove("show"), 50);
-        }, 600);
-      }, 150);
-    }
-  }, 80);
+  if(scene.classList.contains("sucking") || wrap.dataset.opening) return;
+  wrap.dataset.opening = "1";
+  wrap.classList.add("dooropen");      // ドアが3D回転で開く（.6s）
+  setTimeout(()=>{                       // 開ききった後に吸い込み演出
+    scene.style.transformOrigin = "50% 78%";
+    scene.classList.add("sucking");
+    flash.classList.add("show");
+    setTimeout(()=>{
+      show("screen-intro");
+      scene.classList.remove("sucking");
+      scene.style.transformOrigin = "";
+      wrap.classList.remove("dooropen");
+      delete wrap.dataset.opening;
+      setTimeout(()=>flash.classList.remove("show"), 50);
+    }, 600);
+  }, 720);
 }
 
 function startQuiz(){
