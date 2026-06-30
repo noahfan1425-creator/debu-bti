@@ -104,26 +104,12 @@
   .palm{
     position:absolute;
     bottom:0;
-    width:8px;
+    transform:translateX(-50%);
   }
-  .palm .trunk{
-    position:absolute;
-    bottom:0;
-    left:1px;
-    width:6px;
-    height:54px;
-    background:#7a5230;
-    border:2px solid var(--ink);
-    border-radius:2px;
-  }
-  .palm .leaf{
-    position:absolute;
-    bottom:46px;
-    width:30px;
-    height:14px;
-    background:#3f8b4c;
-    border:2px solid var(--ink);
-    border-radius:50% 50% 50% 0;
+  .palm img{
+    height:100%;
+    width:auto;
+    display:block;
   }
   .road{
     position:absolute;
@@ -1264,54 +1250,14 @@
   </div>
   <img src="cessna.png" class="cessna" alt="">
   <div class="skyline">
-    <div class="palm" style="left:3%;">
-      <div class="trunk" style="height:72px;"></div>
-      <div class="leaf" style="bottom:64px;transform:rotate(-28deg);left:-14px;"></div>
-      <div class="leaf" style="bottom:61px;transform:rotate(12deg);left:-5px;"></div>
-      <div class="leaf" style="bottom:59px;transform:rotate(50deg);left:3px;"></div>
-    </div>
-    <div class="palm" style="left:13%;">
-      <div class="trunk" style="height:54px;"></div>
-      <div class="leaf" style="bottom:46px;transform:rotate(-25deg);left:-14px;"></div>
-      <div class="leaf" style="bottom:43px;transform:rotate(15deg);left:-6px;"></div>
-      <div class="leaf" style="bottom:41px;transform:rotate(55deg);left:2px;"></div>
-    </div>
-    <div class="palm" style="left:23%;">
-      <div class="trunk" style="height:82px;"></div>
-      <div class="leaf" style="bottom:74px;transform:rotate(-30deg);left:-14px;"></div>
-      <div class="leaf" style="bottom:71px;transform:rotate(10deg);left:-6px;"></div>
-      <div class="leaf" style="bottom:69px;transform:rotate(48deg);left:2px;"></div>
-    </div>
-    <div class="palm" style="left:36%;">
-      <div class="trunk" style="height:62px;"></div>
-      <div class="leaf" style="bottom:54px;transform:rotate(-22deg);left:-14px;"></div>
-      <div class="leaf" style="bottom:51px;transform:rotate(16deg);left:-6px;"></div>
-      <div class="leaf" style="bottom:49px;transform:rotate(54deg);left:2px;"></div>
-    </div>
-    <div class="palm" style="left:50%;">
-      <div class="trunk" style="height:78px;"></div>
-      <div class="leaf" style="bottom:70px;transform:rotate(-28deg);left:-14px;"></div>
-      <div class="leaf" style="bottom:67px;transform:rotate(14deg);left:-6px;"></div>
-      <div class="leaf" style="bottom:65px;transform:rotate(50deg);left:2px;"></div>
-    </div>
-    <div class="palm" style="left:63%;">
-      <div class="trunk" style="height:58px;"></div>
-      <div class="leaf" style="bottom:50px;transform:rotate(-20deg);left:-14px;"></div>
-      <div class="leaf" style="bottom:47px;transform:rotate(18deg);left:-6px;"></div>
-      <div class="leaf" style="bottom:45px;transform:rotate(52deg);left:2px;"></div>
-    </div>
-    <div class="palm" style="left:76%;">
-      <div class="trunk" style="height:86px;"></div>
-      <div class="leaf" style="bottom:78px;transform:rotate(-32deg);left:-14px;"></div>
-      <div class="leaf" style="bottom:75px;transform:rotate(8deg);left:-6px;"></div>
-      <div class="leaf" style="bottom:73px;transform:rotate(46deg);left:2px;"></div>
-    </div>
-    <div class="palm" style="left:88%;">
-      <div class="trunk" style="height:66px;"></div>
-      <div class="leaf" style="bottom:58px;transform:rotate(-26deg);left:-14px;"></div>
-      <div class="leaf" style="bottom:55px;transform:rotate(14deg);left:-6px;"></div>
-      <div class="leaf" style="bottom:53px;transform:rotate(52deg);left:2px;"></div>
-    </div>
+    <div class="palm" style="left:3%; height:150px;"><img src="palm.png" alt=""></div>
+    <div class="palm" style="left:13%; height:115px;"><img src="palm.png" alt=""></div>
+    <div class="palm" style="left:23%; height:170px;"><img src="palm.png" alt=""></div>
+    <div class="palm" style="left:36%; height:128px;"><img src="palm.png" alt=""></div>
+    <div class="palm" style="left:50%; height:162px;"><img src="palm.png" alt=""></div>
+    <div class="palm" style="left:63%; height:120px;"><img src="palm.png" alt=""></div>
+    <div class="palm" style="left:76%; height:178px;"><img src="palm.png" alt=""></div>
+    <div class="palm" style="left:88%; height:138px;"><img src="palm.png" alt=""></div>
   </div>
   <div class="bg-green-strip"></div>
   <div class="road">
