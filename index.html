@@ -602,6 +602,13 @@
     font-size:0.9em;
     padding-left:1.2em;
   }
+  .container.intro-mode{
+    background:none;
+    border:none;
+    box-shadow:none;
+    padding:0;
+    overflow:visible;
+  }
   #screen-intro{ text-align:center; }
   /* ===== タッチパネル端末（CSSで再現） ===== */
   .kiosk-device{
@@ -1522,7 +1529,6 @@
         <span class="kd-keypad"></span>
       </div>
     </div>
-    <button class="secondary kiosk-menu" onclick="showAllTypes()">📖 16タイプ一覧を見る</button>
   </div>
 
   <div class="screen" id="screen-alltypes">
@@ -1912,7 +1918,9 @@ function showAllTypes(){
 function show(id){
   document.querySelectorAll(".screen").forEach(el=>el.classList.remove("active"));
   document.getElementById(id).classList.add("active");
-  document.querySelector(".container").classList.toggle("building-mode", id === "screen-title");
+  const _c = document.querySelector(".container");
+  _c.classList.toggle("building-mode", id === "screen-title");
+  _c.classList.toggle("intro-mode", id === "screen-intro");
   const fullscreen2d = document.getElementById("shop2d-fullscreen");
   if(fullscreen2d) fullscreen2d.classList.toggle("active", id === "screen-title");
 }
