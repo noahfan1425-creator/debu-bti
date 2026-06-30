@@ -862,6 +862,82 @@
     transform:translate(3px,4px);
     box-shadow:0 0 0 var(--ink);
   }
+  /* ===== キオスク（タッチパネル）風クイズ画面 ===== */
+  .kiosk-screen{
+    margin:-32px -28px;
+    overflow:hidden;
+    background:linear-gradient(180deg,#ffe26a 0%, #ffb52e 100%);
+  }
+  .kiosk-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    background:#d62828;
+    padding:12px 18px;
+    border-bottom:5px solid #ffce00;
+  }
+  .kiosk-logo{
+    font-family:"Mochiy Pop One",sans-serif;
+    color:#fff;
+    font-size:1.3em;
+    letter-spacing:1px;
+    text-shadow:1.5px 1.5px 0 rgba(0,0,0,0.25);
+  }
+  .kiosk-order{
+    background:#fff;
+    color:#d62828;
+    font-weight:800;
+    font-size:0.82em;
+    padding:5px 14px;
+    border-radius:20px;
+    border:2px solid #ffce00;
+    white-space:nowrap;
+  }
+  .kiosk-body{
+    padding:20px 18px 24px;
+  }
+  .kiosk-qcard{
+    position:relative;
+    background:#fff;
+    border:3px solid var(--ink);
+    border-radius:16px;
+    padding:22px 16px 16px;
+    margin:16px 0 18px;
+    box-shadow:0 5px 0 rgba(0,0,0,0.13);
+  }
+  .kiosk-qtag{
+    position:absolute;
+    top:-12px; left:16px;
+    background:#ffce00;
+    color:var(--ink);
+    font-weight:800;
+    font-size:0.62em;
+    letter-spacing:2px;
+    padding:3px 12px;
+    border-radius:6px;
+    border:2px solid var(--ink);
+  }
+  .kiosk-qcard .q-text{
+    margin:0;
+    min-height:2.6em;
+    font-size:1.1em;
+  }
+  .kiosk-foot{
+    text-align:center;
+    font-size:0.72em;
+    font-weight:800;
+    color:#8a4b00;
+    margin-top:10px;
+    letter-spacing:1px;
+  }
+  #screen-quiz .choice{
+    background:#fff;
+    border-color:var(--ink);
+    box-shadow:3px 4px 0 var(--ink);
+  }
+  #screen-quiz .choice:hover{
+    background:#fff3d0;
+  }
   .result-emoji{
     font-size:3.4em;
     text-align:center;
@@ -1377,20 +1453,31 @@
   </div>
 
   <div class="screen" id="screen-quiz">
-    <div class="q-count" id="q-count"></div>
-    <div class="progress-wrap">
-      <div class="progress-track"><div class="progress-bar" id="progress-bar"></div></div>
-      <div class="progress-dots" id="progress-dots"></div>
-      <div class="progress-char" id="progress-char">
-        <div class="char-head">
-          <div class="char-cheek"></div>
-          <div class="char-eye"></div>
-          <div class="char-mouth"></div>
+    <div class="kiosk-screen">
+      <div class="kiosk-header">
+        <span class="kiosk-logo">デブBTI</span>
+        <span class="kiosk-order" id="q-count"></span>
+      </div>
+      <div class="kiosk-body">
+        <div class="progress-wrap">
+          <div class="progress-track"><div class="progress-bar" id="progress-bar"></div></div>
+          <div class="progress-dots" id="progress-dots"></div>
+          <div class="progress-char" id="progress-char">
+            <div class="char-head">
+              <div class="char-cheek"></div>
+              <div class="char-eye"></div>
+              <div class="char-mouth"></div>
+            </div>
+          </div>
         </div>
+        <div class="kiosk-qcard">
+          <span class="kiosk-qtag">QUESTION</span>
+          <div class="q-text" id="q-text"></div>
+        </div>
+        <div id="choices"></div>
+        <div class="kiosk-foot">▼ こちらからお選びください ▼</div>
       </div>
     </div>
-    <div class="q-text" id="q-text"></div>
-    <div id="choices"></div>
   </div>
 
   <div class="screen" id="screen-result">
@@ -1626,7 +1713,7 @@ function startQuiz(){
 
 function renderQuestion(){
   const q = questions[order[current]];
-  document.getElementById("q-count").textContent = (current+1) + " / " + questions.length;
+  document.getElementById("q-count").textContent = "No. " + (current+1) + " / " + questions.length;
   document.getElementById("progress-bar").style.width = ((current)/questions.length*100) + "%";
   document.getElementById("q-text").textContent = q.text;
   const choicesEl = document.getElementById("choices");
