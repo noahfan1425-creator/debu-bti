@@ -602,6 +602,47 @@
     font-size:0.9em;
     padding-left:1.2em;
   }
+  #screen-intro{ text-align:center; }
+  .kiosk{
+    position:relative;
+    display:inline-block;
+    width:min(330px,82%);
+    cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .kiosk-img{
+    width:100%;
+    height:auto;
+    display:block;
+    border-radius:8px;
+    filter:drop-shadow(0 8px 22px rgba(0,0,0,0.28));
+    transition:transform .15s ease;
+  }
+  .kiosk:hover .kiosk-img{ transform:translateY(-3px); }
+  .kiosk:active .kiosk-img{ transform:translateY(0) scale(0.99); }
+  .kiosk-start{
+    position:absolute;
+    left:50%; top:55%;
+    transform:translate(-50%,-50%);
+    pointer-events:none;
+    background:#d62828;
+    color:#fff;
+    font-family:"Mochiy Pop One",sans-serif;
+    font-size:0.82em;
+    line-height:1.3;
+    text-align:center;
+    padding:9px 16px;
+    border-radius:12px;
+    border:3px solid #fff;
+    box-shadow:0 4px 12px rgba(0,0,0,0.4);
+    white-space:nowrap;
+    animation:kioskPulse 1.3s ease-in-out infinite;
+  }
+  @keyframes kioskPulse{
+    0%,100%{ transform:translate(-50%,-50%) scale(1); }
+    50%{ transform:translate(-50%,-50%) scale(1.07); }
+  }
+  .kiosk-menu{ margin-top:20px; }
   #screen-intro .intro{
     position:relative;
     background:#fff8ec;
@@ -1309,19 +1350,11 @@
   </div>
 
   <div class="screen" id="screen-intro">
-    <p class="subtitle">あなたはどんなタイプのデブ？測ってみよう</p>
-    <div class="intro">
-      <span class="menu-tag">MENU</span>
-      <p>MBTIをモチーフにした、ゆる〜い食生活診断です。<br>
-      「食欲」「間食」「こだわり」「計画性」の4つの軸、全20問の質問に答えると、16タイプの中からあなたの「デブタイプ」と、おすすめの高カロリーメシが分かります。</p>
-      <ul>
-        <li>所要時間：約3分</li>
-        <li>各質問は「とてもそう思う」〜「全くそう思わない」の4段階で回答</li>
-        <li>結果は完全にネタです。気軽にどうぞ</li>
-      </ul>
+    <div class="kiosk" onclick="startQuiz()" role="button" tabindex="0" aria-label="診断をはじめる" onkeydown="if(event.key==='Enter'||event.key===' ')startQuiz()">
+      <img src="タッチパネル.png" class="kiosk-img" alt="デブBTI セルフ注文機">
+      <span class="kiosk-start">▶ タップして<br>診断スタート</span>
     </div>
-    <button class="primary shop-order-btn" onclick="startQuiz()">🍔 診断をはじめる ▶</button>
-    <button class="secondary shop-menu-btn" onclick="showAllTypes()">📖 16タイプ一覧を見る</button>
+    <button class="secondary kiosk-menu" onclick="showAllTypes()">📖 16タイプ一覧を見る</button>
   </div>
 
   <div class="screen" id="screen-alltypes">
