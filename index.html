@@ -603,46 +603,120 @@
     padding-left:1.2em;
   }
   #screen-intro{ text-align:center; }
-  .kiosk{
-    position:relative;
+  /* ===== タッチパネル端末（CSSで再現） ===== */
+  .kiosk-device{
     display:inline-block;
-    width:min(330px,82%);
+    width:min(300px,86%);
+    background:linear-gradient(180deg,#fafafa,#e9e9e9);
+    border:2px solid #cfcfcf;
+    border-radius:24px;
+    padding:14px 14px 8px;
+    box-shadow:0 14px 30px rgba(0,0,0,0.32);
     cursor:pointer;
     -webkit-tap-highlight-color:transparent;
+    transition:transform .15s ease, box-shadow .15s ease;
   }
-  .kiosk-img{
-    width:100%;
-    height:auto;
-    display:block;
+  .kiosk-device:hover{ transform:translateY(-4px); box-shadow:0 20px 36px rgba(0,0,0,0.36); }
+  .kiosk-device:active{ transform:translateY(-1px) scale(.99); }
+  .kd-screen{
+    border:6px solid #141414;
+    border-radius:10px;
+    overflow:hidden;
+    background:#fff;
+  }
+  .kd-top{
+    background:linear-gradient(180deg,#79c6ef 0%,#bfe6ff 100%);
+    padding:12px 0 10px;
+  }
+  .kd-logo{
+    font-family:"Mochiy Pop One",sans-serif;
+    font-size:1.85em;
+    color:#e3000f;
+    -webkit-text-stroke:2.5px #fff;
+    paint-order:stroke fill;
+    text-shadow:2px 3px 0 rgba(0,0,0,0.22);
+    letter-spacing:1px;
+  }
+  .kd-menu{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:6px;
+    padding:8px;
+    background:linear-gradient(180deg,#ffab40 0%,#ff8c1a 100%);
+  }
+  .kd-item{
+    position:relative;
+    background:#fff;
     border-radius:8px;
-    filter:drop-shadow(0 8px 22px rgba(0,0,0,0.28));
-    transition:transform .15s ease;
+    padding:9px 0;
+    font-size:1.75em;
+    line-height:1;
+    box-shadow:0 2px 3px rgba(0,0,0,0.18);
   }
-  .kiosk:hover .kiosk-img{ transform:translateY(-3px); }
-  .kiosk:active .kiosk-img{ transform:translateY(0) scale(0.99); }
-  .kiosk-start{
+  .kd-new{
     position:absolute;
-    left:50%; top:55%;
-    transform:translate(-50%,-50%);
-    pointer-events:none;
-    background:#d62828;
+    top:-5px; left:-5px;
+    background:#e3000f;
+    color:#fff;
+    font-family:Arial,sans-serif;
+    font-size:0.3em;
+    font-weight:800;
+    letter-spacing:.5px;
+    padding:2px 6px;
+    border-radius:4px;
+    transform:rotate(-12deg);
+    box-shadow:0 1px 2px rgba(0,0,0,0.3);
+  }
+  .kd-foot{
+    background:#fff;
+    padding:11px 9px 13px;
+  }
+  .kd-tagline{
+    font-size:0.72em;
+    font-weight:800;
+    color:#333;
+    margin-bottom:9px;
+  }
+  .kd-cta{
+    background:#e3000f;
     color:#fff;
     font-family:"Mochiy Pop One",sans-serif;
-    font-size:0.82em;
-    line-height:1.3;
-    text-align:center;
-    padding:9px 16px;
-    border-radius:12px;
-    border:3px solid #fff;
-    box-shadow:0 4px 12px rgba(0,0,0,0.4);
-    white-space:nowrap;
+    font-size:0.9em;
+    padding:11px 8px;
+    border-radius:11px;
+    box-shadow:0 4px 0 #a30009;
     animation:kioskPulse 1.3s ease-in-out infinite;
   }
-  @keyframes kioskPulse{
-    0%,100%{ transform:translate(-50%,-50%) scale(1); }
-    50%{ transform:translate(-50%,-50%) scale(1.07); }
+  .kd-hardware{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:11px 6px 5px;
   }
-  .kiosk-menu{ margin-top:20px; }
+  .kd-brand{
+    font-size:0.58em;
+    font-weight:800;
+    color:#777;
+    letter-spacing:1px;
+    white-space:nowrap;
+  }
+  .kd-reader{
+    flex:1;
+    height:16px;
+    background:linear-gradient(180deg,#9a9a9a,#7d7d7d);
+    border-radius:4px;
+  }
+  .kd-keypad{
+    width:36px; height:26px;
+    background:#bdbdbd;
+    border-radius:4px;
+    box-shadow:inset 0 0 0 2px #a5a5a5;
+  }
+  @keyframes kioskPulse{
+    0%,100%{ transform:scale(1); }
+    50%{ transform:scale(1.05); }
+  }
+  .kiosk-menu{ margin-top:22px; }
   #screen-intro .intro{
     position:relative;
     background:#fff8ec;
@@ -1426,9 +1500,27 @@
   </div>
 
   <div class="screen" id="screen-intro">
-    <div class="kiosk" onclick="startQuiz()" role="button" tabindex="0" aria-label="診断をはじめる" onkeydown="if(event.key==='Enter'||event.key===' ')startQuiz()">
-      <img src="タッチパネル.png" class="kiosk-img" alt="デブBTI セルフ注文機">
-      <span class="kiosk-start">▶ タップして<br>診断スタート</span>
+    <div class="kiosk-device" onclick="startQuiz()" role="button" tabindex="0" aria-label="診断をはじめる" onkeydown="if(event.key==='Enter'||event.key===' ')startQuiz()">
+      <div class="kd-screen">
+        <div class="kd-top"><span class="kd-logo">デブBTI</span></div>
+        <div class="kd-menu">
+          <div class="kd-item"><span class="kd-new">NEW</span>🍔</div>
+          <div class="kd-item">🍔</div>
+          <div class="kd-item">🍔</div>
+          <div class="kd-item">🍟</div>
+          <div class="kd-item">🥤</div>
+          <div class="kd-item">🍦</div>
+        </div>
+        <div class="kd-foot">
+          <div class="kd-tagline">こちらからご注文ください！</div>
+          <div class="kd-cta">▶ タップして診断スタート</div>
+        </div>
+      </div>
+      <div class="kd-hardware">
+        <span class="kd-brand">コーララ</span>
+        <span class="kd-reader"></span>
+        <span class="kd-keypad"></span>
+      </div>
     </div>
     <button class="secondary kiosk-menu" onclick="showAllTypes()">📖 16タイプ一覧を見る</button>
   </div>
