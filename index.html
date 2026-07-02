@@ -1393,6 +1393,86 @@
     padding:26px 24px 18px;
     position:relative;
   }
+  /* ===== 4大分類マップ（プロトタイプ） ===== */
+  #screen-categories .cat-head{
+    text-align:center;
+    position:relative;
+    margin:2px 0 16px;
+  }
+  .cat-proto{
+    display:inline-block;
+    background:#111;
+    color:#ffce00;
+    font-size:0.6em;
+    font-weight:800;
+    letter-spacing:2px;
+    padding:2px 10px;
+    border-radius:20px;
+    margin-bottom:6px;
+  }
+  .cat-title{
+    font-family:"Mochiy Pop One",sans-serif;
+    font-size:1.35em;
+    color:var(--accent);
+    text-shadow:1.5px 1.5px 0 var(--ink);
+    -webkit-text-stroke:0.4px var(--ink);
+  }
+  .cat-sub{
+    font-size:0.76em;
+    line-height:1.5;
+    color:#6a5643;
+    margin-top:4px;
+  }
+  .cat-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+  }
+  .cat-card{
+    border:3px solid var(--ink);
+    border-radius:14px;
+    overflow:hidden;
+    background:#fff;
+    box-shadow:3px 4px 0 var(--ink);
+    display:flex;
+    flex-direction:column;
+  }
+  .cc-head{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    padding:8px 10px;
+    color:#fff;
+  }
+  .cc-emoji{ font-size:1.4em; line-height:1; }
+  .cc-name{ font-weight:800; font-size:0.92em; }
+  .cc-axis{ font-size:0.62em; opacity:0.92; }
+  .cc-note{
+    font-size:0.68em;
+    line-height:1.45;
+    padding:7px 10px;
+    background:#fff8ec;
+    color:#5a4632;
+    border-bottom:2px dashed #e6d6b6;
+  }
+  .cc-types{
+    padding:8px 10px 10px;
+    display:flex;
+    flex-direction:column;
+    gap:5px;
+  }
+  .cc-type{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-size:0.8em;
+    font-weight:700;
+    color:#2d1b0e;
+  }
+  .cc-type .t-emoji{ font-size:1.05em; }
+  @media(max-width:440px){
+    .cat-grid{ grid-template-columns:1fr; }
+  }
   #screen-alltypes::before, #screen-alltypes::after{
     content:"";
     position:absolute;
@@ -1662,6 +1742,17 @@
     <div class="axis-bars" id="axis-bars"></div>
     <button class="primary" onclick="restartQuiz()">もう一度診断する 🔁</button>
     <button class="secondary" onclick="showAllTypes()">📖 16タイプ一覧を見る</button>
+  </div>
+
+  <div class="screen" id="screen-categories">
+    <span class="back-link" onclick="show('screen-intro')">✂ 戻る</span>
+    <div class="cat-head">
+      <span class="cat-proto">PROTOTYPE</span>
+      <div class="cat-title">デブ 4大分類マップ</div>
+      <div class="cat-sub">「食欲 × こだわり」で分かれる4つのタイプ群<br>近いタイプがひと目で分かる</div>
+    </div>
+    <div id="cat-grid" class="cat-grid"></div>
+    <button class="primary" onclick="startQuiz()" style="margin-top:16px;">診断をはじめる ▶</button>
   </div>
 
 </div>
@@ -1975,11 +2066,45 @@ function showAllTypes(){
   show("screen-alltypes");
 }
 
+// 4大分類: 食欲(大食い/少食) × こだわり(味/量)
+const categories = [
+  {title:"グルメ大食い派", axis:"大食い × 味重視", emoji:"🍽️", color:"#e3000f",
+   note:"量も質も妥協なし。食の完全制覇を狙う本格派。", codes:["MSGP","MSGI","MNGP","MNGI"]},
+  {title:"爆食ボリューム派", axis:"大食い × 量重視", emoji:"🍖", color:"#ef7d00",
+   note:"とにかくガッツリ！満腹こそ正義の食いしん坊。", codes:["MSBP","MSBI","MNBP","MNBI"]},
+  {title:"少量美食派", axis:"少食 × 味重視", emoji:"🌸", color:"#3f8fd0",
+   note:"量より一口の感動。上品でこだわりのグルメ志向。", codes:["LSGP","LSGI","LNGP","LNGI"]},
+  {title:"マイペース堅実派", axis:"少食 × 量・コスパ重視", emoji:"📋", color:"#3f9d54",
+   note:"ほどほど・効率重視。無理なく食を楽しむ現実派。", codes:["LSBP","LSBI","LNBP","LNBI"]},
+];
+
+function showCategories(){
+  const grid = document.getElementById("cat-grid");
+  grid.innerHTML = "";
+  categories.forEach(cat=>{
+    const typesHtml = cat.codes.map(c=>{
+      const t = types[c];
+      return `<div class="cc-type"><span class="t-emoji">${t.emoji}</span>${t.name}</div>`;
+    }).join("");
+    const card = document.createElement("div");
+    card.className = "cat-card";
+    card.innerHTML = `
+      <div class="cc-head" style="background:${cat.color}">
+        <span class="cc-emoji">${cat.emoji}</span>
+        <span><span class="cc-name">${cat.title}</span><br><span class="cc-axis">${cat.axis}</span></span>
+      </div>
+      <div class="cc-note">${cat.note}</div>
+      <div class="cc-types">${typesHtml}</div>`;
+    grid.appendChild(card);
+  });
+  show("screen-categories");
+}
+
 function openDuct(){
   const duct = document.getElementById("duct");
   if(!duct || duct.classList.contains("open")) return;
   duct.classList.add("open");
-  setTimeout(showAllTypes, 520);
+  setTimeout(showCategories, 520);
 }
 
 function show(id){
