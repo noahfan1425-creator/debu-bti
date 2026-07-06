@@ -33,6 +33,23 @@
     position:relative;
     overflow-x:hidden;
   }
+  #bgm-toggle{
+    position:fixed;
+    top:12px; right:12px;
+    z-index:70;
+    width:42px; height:42px;
+    border-radius:50%;
+    border:3px solid var(--ink);
+    background:#fff;
+    font-size:1.1em;
+    line-height:1;
+    cursor:pointer;
+    box-shadow:2px 3px 0 var(--ink);
+    padding:0;
+    transition:transform .1s;
+  }
+  #bgm-toggle:active{ transform:translate(1px,2px); box-shadow:1px 1px 0 var(--ink); }
+  #bgm-toggle.muted{ opacity:0.55; }
   .interior-bg{
     position:fixed;
     inset:0;
@@ -1670,6 +1687,8 @@
 </style>
 </head>
 <body>
+<audio id="bgm" src="診断中BGM.mp3" loop preload="auto"></audio>
+<button id="bgm-toggle" onclick="toggleBgm()" aria-label="BGMのオン/オフ" title="BGM">🔊</button>
 <div id="flash-overlay" aria-hidden="true"></div>
 <div class="interior-bg" aria-hidden="true">
   <div class="interior-stage">
@@ -1860,6 +1879,37 @@
 </div>
 
 <script>
+// ===== BGM（診断中BGM.mp3 をループ再生） =====
+const bgm = document.getElementById("bgm");
+let bgmMuted = localStorage.getItem("debuBgmMuted") === "1";
+bgm.volume = 0.4;
+
+function updateBgmBtn(){
+  const btn = document.getElementById("bgm-toggle");
+  btn.textContent = bgmMuted ? "🔇" : "🔊";
+  btn.classList.toggle("muted", bgmMuted);
+}
+function tryPlayBgm(){
+  if(bgmMuted) return;
+  bgm.play().catch(()=>{});
+}
+function toggleBgm(){
+  bgmMuted = !bgmMuted;
+  localStorage.setItem("debuBgmMuted", bgmMuted ? "1" : "0");
+  if(bgmMuted){ bgm.pause(); }
+  else { tryPlayBgm(); }
+  updateBgmBtn();
+}
+// ブラウザの自動再生制限のため、最初のユーザー操作で再生開始
+function startBgmOnce(){
+  tryPlayBgm();
+  window.removeEventListener("pointerdown", startBgmOnce);
+  window.removeEventListener("keydown", startBgmOnce);
+}
+window.addEventListener("pointerdown", startBgmOnce);
+window.addEventListener("keydown", startBgmOnce);
+updateBgmBtn();
+
 // 4軸: 食欲(M/L) 間食(S/N) こだわり(G/B) 計画性(P/I)
 const questions = [
   // 食欲軸 M(もりもり大食い) / L(ちょこちょこ少食)
