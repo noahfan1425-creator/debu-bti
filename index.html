@@ -1736,6 +1736,7 @@
 <body>
 <audio id="bgm-town" src="街.mp3" loop preload="auto"></audio>
 <audio id="bgm-quiz" src="診断中BGM.mp3" loop preload="auto"></audio>
+<audio id="propeller" src="プロペラ.mp3" loop preload="auto"></audio>
 <button id="bgm-toggle" onclick="toggleBgm()" aria-label="BGMのオン/オフ" title="BGM">🔊</button>
 <div id="start-gate" onclick="dismissStartGate()" role="button" aria-label="タップしてスタート">
   <div class="sg-inner">
@@ -1963,10 +1964,34 @@ function toggleBgm(){
   else if(currentBgm){ currentBgm.play().catch(()=>{}); }
   updateBgmBtn();
 }
+// ===== セスナのプロペラ音（画面内の位置に応じてフェードイン/アウト） =====
+const propeller = document.getElementById("propeller");
+propeller.volume = 0;
+const cessnaEl = document.querySelector(".cessna");
+const PROP_MAX = 0.45;   // 最大音量
+const PROP_FADE = 340;   // フェードにかける距離(px)
+function updatePropeller(){
+  requestAnimationFrame(updatePropeller);
+  if(!cessnaEl) return;
+  let target = 0;
+  if(!bgmMuted){
+    const r = cessnaEl.getBoundingClientRect();
+    const vw = window.innerWidth;
+    if(r.width > 0 && r.right > 0 && r.left < vw){
+      const enter = Math.min(1, r.right / PROP_FADE);        // 左から入ってくる→フェードイン
+      const exit  = Math.min(1, (vw - r.left) / PROP_FADE);  // 右へ去っていく→フェードアウト
+      target = Math.max(0, Math.min(enter, exit)) * PROP_MAX;
+    }
+  }
+  propeller.volume = Math.max(0, Math.min(1, target));
+}
+updatePropeller();
+
 // ブラウザの自動再生制限のため、最初のユーザー操作で再生開始
 function startBgmOnce(){
   const active = document.querySelector(".screen.active");
   bgmForScreen(active ? active.id : "screen-title");
+  propeller.play().catch(()=>{});
   window.removeEventListener("pointerdown", startBgmOnce);
   window.removeEventListener("keydown", startBgmOnce);
 }
