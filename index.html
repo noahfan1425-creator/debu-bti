@@ -1687,7 +1687,8 @@
 </style>
 </head>
 <body>
-<audio id="bgm" src="診断中BGM.mp3" loop preload="auto"></audio>
+<audio id="bgm-town" src="街.mp3" loop preload="auto"></audio>
+<audio id="bgm-quiz" src="診断中BGM.mp3" loop preload="auto"></audio>
 <button id="bgm-toggle" onclick="toggleBgm()" aria-label="BGMのオン/オフ" title="BGM">🔊</button>
 <div id="flash-overlay" aria-hidden="true"></div>
 <div class="interior-bg" aria-hidden="true">
@@ -1879,30 +1880,39 @@
 </div>
 
 <script>
-// ===== BGM（診断中BGM.mp3 をループ再生） =====
-const bgm = document.getElementById("bgm");
+// ===== BGM（画面に応じて切替・ループ再生） =====
+// トップ画面: 街.mp3 / 入店後: 診断中BGM.mp3
+const bgmTown = document.getElementById("bgm-town");
+const bgmQuiz = document.getElementById("bgm-quiz");
+bgmTown.volume = 0.4;
+bgmQuiz.volume = 0.4;
 let bgmMuted = localStorage.getItem("debuBgmMuted") === "1";
-bgm.volume = 0.4;
+let currentBgm = null;
 
 function updateBgmBtn(){
   const btn = document.getElementById("bgm-toggle");
   btn.textContent = bgmMuted ? "🔇" : "🔊";
   btn.classList.toggle("muted", bgmMuted);
 }
-function tryPlayBgm(){
-  if(bgmMuted) return;
-  bgm.play().catch(()=>{});
+function selectBgm(track){
+  currentBgm = track;
+  [bgmTown, bgmQuiz].forEach(a=>{ if(a !== track && !a.paused) a.pause(); });
+  if(!bgmMuted && track) track.play().catch(()=>{});
+}
+function bgmForScreen(id){
+  selectBgm(id === "screen-title" ? bgmTown : bgmQuiz);
 }
 function toggleBgm(){
   bgmMuted = !bgmMuted;
   localStorage.setItem("debuBgmMuted", bgmMuted ? "1" : "0");
-  if(bgmMuted){ bgm.pause(); }
-  else { tryPlayBgm(); }
+  if(bgmMuted){ bgmTown.pause(); bgmQuiz.pause(); }
+  else if(currentBgm){ currentBgm.play().catch(()=>{}); }
   updateBgmBtn();
 }
 // ブラウザの自動再生制限のため、最初のユーザー操作で再生開始
 function startBgmOnce(){
-  tryPlayBgm();
+  const active = document.querySelector(".screen.active");
+  bgmForScreen(active ? active.id : "screen-title");
   window.removeEventListener("pointerdown", startBgmOnce);
   window.removeEventListener("keydown", startBgmOnce);
 }
@@ -2293,6 +2303,7 @@ function show(id){
   }
   const fullscreen2d = document.getElementById("shop2d-fullscreen");
   if(fullscreen2d) fullscreen2d.classList.toggle("active", id === "screen-title");
+  bgmForScreen(id);
 }
 </script>
 </body>
