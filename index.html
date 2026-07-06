@@ -1134,6 +1134,51 @@
   #screen-quiz .choice:hover{
     background:#fff3d0;
   }
+  /* ===== 結果：レシート機械から排出される演出 ===== */
+  .receipt-machine{
+    text-align:center;
+    margin:-6px 0 0;
+  }
+  .receipt-machine-img{
+    width:150px;
+    max-width:52%;
+    height:auto;
+    display:inline-block;
+    filter:drop-shadow(0 6px 14px rgba(0,0,0,0.25));
+    animation:machineFadeIn .6s ease both;
+  }
+  @keyframes machineFadeIn{
+    from{ opacity:0; transform:translateY(-8px) scale(.95); }
+    to{ opacity:1; transform:none; }
+  }
+  .receipt-paper{
+    position:relative;
+    background:#fffdf6;
+    border:2px solid #e2d7bf;
+    border-radius:4px;
+    box-shadow:0 8px 18px rgba(0,0,0,0.18);
+    padding:22px 16px 16px;
+    margin:-6px 8px 16px;
+    animation:printOut 1s cubic-bezier(.2,.8,.3,1) .5s both;
+  }
+  /* レシート上端のギザギザ（切り取り線） */
+  .receipt-paper::before{
+    content:"";
+    position:absolute;
+    left:0; right:0; top:-9px;
+    height:10px;
+    background:
+      linear-gradient(135deg, transparent 50%, #fffdf6 50%),
+      linear-gradient(-135deg, transparent 50%, #fffdf6 50%);
+    background-size:14px 10px;
+    background-repeat:repeat-x;
+    filter:drop-shadow(0 -1px 0 #e2d7bf);
+  }
+  @keyframes printOut{
+    0%{ opacity:0; clip-path:inset(0 0 100% 0); transform:translateY(-6px); }
+    35%{ opacity:1; }
+    100%{ opacity:1; clip-path:inset(0 0 0 0); transform:translateY(0); }
+  }
   .result-emoji{
     font-size:3.4em;
     text-align:center;
@@ -1879,27 +1924,32 @@
   </div>
 
   <div class="screen" id="screen-result">
-    <div class="result-emoji" id="result-emoji"></div>
-    <div class="result-code" id="result-code"></div>
-    <div class="result-name" id="result-name"></div>
-    <div class="result-catch" id="result-catch"></div>
-    <div class="result-desc" id="result-desc"></div>
-    <div class="point-cols">
-      <div class="point-box point-good">
-        <div class="point-label">😊 愛されポイント</div>
-        <ul id="result-good"></ul>
-      </div>
-      <div class="point-box point-bad">
-        <div class="point-label">😅 気をつけたいポイント</div>
-        <ul id="result-bad"></ul>
-      </div>
+    <div class="receipt-machine">
+      <img src="レシート機械.png" class="receipt-machine-img" alt="診断結果">
     </div>
-    <div class="food-box">
-      <div class="label">🍽 あなたにおすすめの高カロリーメシ</div>
-      <div class="food-name" id="result-food-name"></div>
-      <div class="food-reason" id="result-food-reason"></div>
+    <div class="receipt-paper" id="receipt-paper">
+      <div class="result-emoji" id="result-emoji"></div>
+      <div class="result-code" id="result-code"></div>
+      <div class="result-name" id="result-name"></div>
+      <div class="result-catch" id="result-catch"></div>
+      <div class="result-desc" id="result-desc"></div>
+      <div class="point-cols">
+        <div class="point-box point-good">
+          <div class="point-label">😊 愛されポイント</div>
+          <ul id="result-good"></ul>
+        </div>
+        <div class="point-box point-bad">
+          <div class="point-label">😅 気をつけたいポイント</div>
+          <ul id="result-bad"></ul>
+        </div>
+      </div>
+      <div class="food-box">
+        <div class="label">🍽 あなたにおすすめの高カロリーメシ</div>
+        <div class="food-name" id="result-food-name"></div>
+        <div class="food-reason" id="result-food-reason"></div>
+      </div>
+      <div class="axis-bars" id="axis-bars"></div>
     </div>
-    <div class="axis-bars" id="axis-bars"></div>
     <button class="primary" onclick="restartQuiz()">もう一度診断する 🔁</button>
     <button class="secondary" onclick="showAllTypes()">📖 16タイプ一覧を見る</button>
   </div>
