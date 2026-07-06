@@ -2183,6 +2183,7 @@ function enterShop(){
     seDoor.currentTime = 0;
     seDoor.play().catch(()=>{});
   }
+  selectBgm(bgmQuiz);                   // ドアクリックと同時に診断中BGMを開始
   wrap.classList.add("dooropen");      // ドアが3D回転で開く（.6s）
   setTimeout(()=>{                       // 開ききった後に吸い込み演出
     scene.style.transformOrigin = "50% 78%";
