@@ -1738,6 +1738,7 @@
 <audio id="bgm-quiz" src="診断中BGM.mp3" loop preload="auto"></audio>
 <audio id="propeller" src="プロペラ.mp3" loop preload="auto"></audio>
 <audio id="se-door" src="ドアを開ける2.mp3" preload="auto"></audio>
+<audio id="se-puyon" src="ぷよん.mp3" preload="auto"></audio>
 <button id="bgm-toggle" onclick="toggleBgm()" aria-label="BGMのオン/オフ" title="BGM">🔊</button>
 <div id="start-gate" onclick="dismissStartGate()" role="button" aria-label="タップしてスタート">
   <div class="sg-inner">
@@ -1987,6 +1988,17 @@ function updatePropeller(){
   propeller.volume = Math.max(0, Math.min(1, target));
 }
 updatePropeller();
+
+// ===== クリック/タップ時のSE（ぷよん）※ドアは除外 =====
+const sePuyon = document.getElementById("se-puyon");
+sePuyon.volume = 0.6;
+document.addEventListener("click", (e)=>{
+  if(bgmMuted) return;
+  // ドア（開閉SEが別にあるため）は鳴らさない
+  if(e.target.closest && e.target.closest(".shop-img-wrap")) return;
+  sePuyon.currentTime = 0;
+  sePuyon.play().catch(()=>{});
+});
 
 // ブラウザの自動再生制限のため、最初のユーザー操作で再生開始
 function startBgmOnce(){
