@@ -1737,6 +1737,7 @@
 <audio id="bgm-town" src="街.mp3" loop preload="auto"></audio>
 <audio id="bgm-quiz" src="診断中BGM.mp3" loop preload="auto"></audio>
 <audio id="propeller" src="プロペラ.mp3" loop preload="auto"></audio>
+<audio id="se-door" src="ドアを開ける2.mp3" preload="auto"></audio>
 <button id="bgm-toggle" onclick="toggleBgm()" aria-label="BGMのオン/オフ" title="BGM">🔊</button>
 <div id="start-gate" onclick="dismissStartGate()" role="button" aria-label="タップしてスタート">
   <div class="sg-inner">
@@ -2177,6 +2178,11 @@ function enterShop(){
   const flash = document.getElementById("flash-overlay");
   if(scene.classList.contains("sucking") || wrap.dataset.opening) return;
   wrap.dataset.opening = "1";
+  if(!bgmMuted){
+    const seDoor = document.getElementById("se-door");
+    seDoor.currentTime = 0;
+    seDoor.play().catch(()=>{});
+  }
   wrap.classList.add("dooropen");      // ドアが3D回転で開く（.6s）
   setTimeout(()=>{                       // 開ききった後に吸い込み演出
     scene.style.transformOrigin = "50% 78%";
