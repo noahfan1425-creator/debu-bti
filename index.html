@@ -33,6 +33,35 @@
     position:relative;
     overflow-x:hidden;
   }
+  #start-gate{
+    position:fixed; inset:0;
+    z-index:65;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:rgba(8,18,38,0.42);
+    cursor:pointer;
+    transition:opacity .5s ease;
+  }
+  #start-gate.hide{ opacity:0; pointer-events:none; }
+  .sg-inner{ text-align:center; }
+  .sg-title{
+    font-family:"Mochiy Pop One",sans-serif;
+    font-size:2.6em;
+    color:#e3000f;
+    -webkit-text-stroke:2.5px #fff;
+    paint-order:stroke fill;
+    text-shadow:3px 4px 0 rgba(0,0,0,0.3);
+    letter-spacing:1px;
+  }
+  .sg-hint{
+    margin-top:16px;
+    color:#fff;
+    font-weight:800;
+    font-size:1.1em;
+    text-shadow:1px 2px 4px rgba(0,0,0,0.6);
+    animation:kioskPulse 1.3s ease-in-out infinite;
+  }
   #bgm-toggle{
     position:fixed;
     top:12px; right:12px;
@@ -1690,6 +1719,12 @@
 <audio id="bgm-town" src="街.mp3" loop preload="auto"></audio>
 <audio id="bgm-quiz" src="診断中BGM.mp3" loop preload="auto"></audio>
 <button id="bgm-toggle" onclick="toggleBgm()" aria-label="BGMのオン/オフ" title="BGM">🔊</button>
+<div id="start-gate" onclick="dismissStartGate()" role="button" aria-label="タップしてスタート">
+  <div class="sg-inner">
+    <div class="sg-title">デブBTI</div>
+    <div class="sg-hint">🔊 タップしてスタート</div>
+  </div>
+</div>
 <div id="flash-overlay" aria-hidden="true"></div>
 <div class="interior-bg" aria-hidden="true">
   <div class="interior-stage">
@@ -1920,9 +1955,14 @@ window.addEventListener("pointerdown", startBgmOnce);
 window.addEventListener("keydown", startBgmOnce);
 updateBgmBtn();
 
-// サイトを開いた段階で街BGMの再生を試みる（自動再生が許可されていれば即再生。
-// ブラウザにブロックされた場合は上の最初の操作で再生開始する）
-selectBgm(bgmTown);
+// 開始ゲート：タップで街BGMを鳴らし、閉じたドアの店先を表示
+// （ブラウザは操作前の音付き自動再生を禁止するため、この最初のタップで再生開始）
+function dismissStartGate(){
+  const g = document.getElementById("start-gate");
+  if(!g) return;
+  g.classList.add("hide");
+  setTimeout(()=>{ g.style.display = "none"; }, 500);
+}
 
 // 4軸: 食欲(M/L) 間食(S/N) こだわり(G/B) 計画性(P/I)
 const questions = [
