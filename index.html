@@ -1969,32 +1969,27 @@
   </div>
 
   <div class="screen" id="screen-result">
-    <div class="receipt-machine">
-      <img src="machine_full.png" class="receipt-machine-img" id="receipt-machine-img" alt="診断結果">
-    </div>
-    <div class="receipt-paper" id="receipt-paper">
-      <div class="result-emoji" id="result-emoji"></div>
-      <div class="result-code" id="result-code"></div>
-      <div class="result-name" id="result-name"></div>
-      <div class="result-catch" id="result-catch"></div>
-      <div class="result-desc" id="result-desc"></div>
-      <div class="point-cols">
-        <div class="point-box point-good">
-          <div class="point-label">😊 愛されポイント</div>
-          <ul id="result-good"></ul>
-        </div>
-        <div class="point-box point-bad">
-          <div class="point-label">😅 気をつけたいポイント</div>
-          <ul id="result-bad"></ul>
-        </div>
+    <div class="result-emoji" id="result-emoji"></div>
+    <div class="result-code" id="result-code"></div>
+    <div class="result-name" id="result-name"></div>
+    <div class="result-catch" id="result-catch"></div>
+    <div class="result-desc" id="result-desc"></div>
+    <div class="point-cols">
+      <div class="point-box point-good">
+        <div class="point-label">😊 愛されポイント</div>
+        <ul id="result-good"></ul>
       </div>
-      <div class="food-box">
-        <div class="label">🍽 あなたにおすすめの高カロリーメシ</div>
-        <div class="food-name" id="result-food-name"></div>
-        <div class="food-reason" id="result-food-reason"></div>
+      <div class="point-box point-bad">
+        <div class="point-label">😅 気をつけたいポイント</div>
+        <ul id="result-bad"></ul>
       </div>
-      <div class="axis-bars" id="axis-bars"></div>
     </div>
+    <div class="food-box">
+      <div class="label">🍽 あなたにおすすめの高カロリーメシ</div>
+      <div class="food-name" id="result-food-name"></div>
+      <div class="food-reason" id="result-food-reason"></div>
+    </div>
+    <div class="axis-bars" id="axis-bars"></div>
     <button class="primary" onclick="restartQuiz()">もう一度診断する 🔁</button>
     <button class="secondary" onclick="showAllTypes()">📖 16タイプ一覧を見る</button>
   </div>
@@ -2419,28 +2414,7 @@ function showResult(){
   });
 
   show("screen-result");
-  positionReceiptAtSlot();
 }
-
-// レシートの上端をマシン画像の排出口（約57%）に合わせて配置
-const SLOT_FRAC = 0.575; // 排出口下端の高さ（マシン画像に対する割合）
-function positionReceiptAtSlot(){
-  const mImg = document.getElementById("receipt-machine-img");
-  const paper = document.getElementById("receipt-paper");
-  if(!mImg || !paper) return;
-  const apply = ()=>{
-    const mh = mImg.getBoundingClientRect().height;
-    if(!mh) return;
-    paper.style.marginTop = (-(mh * (1 - SLOT_FRAC))) + "px";
-  };
-  if(mImg.complete && mImg.naturalHeight) apply();
-  else mImg.addEventListener("load", apply, { once:true });
-  // レイアウト確定後にも再計算
-  requestAnimationFrame(apply);
-}
-window.addEventListener("resize", ()=>{
-  if(document.getElementById("screen-result").classList.contains("active")) positionReceiptAtSlot();
-});
 
 function restartQuiz(){
   show("screen-intro");
@@ -2533,7 +2507,7 @@ function show(id){
   document.getElementById(id).classList.add("active");
   const _c = document.querySelector(".container");
   _c.classList.toggle("building-mode", id === "screen-title");
-  _c.classList.toggle("intro-mode", id === "screen-intro" || id === "screen-result");
+  _c.classList.toggle("intro-mode", id === "screen-intro");
   document.body.classList.toggle("inside", id !== "screen-title");
   document.body.classList.toggle("show-duct", id === "screen-intro");
   if(id === "screen-intro"){
