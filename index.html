@@ -1224,6 +1224,14 @@
     background:linear-gradient(180deg, rgba(0,0,0,0.08), transparent);
     pointer-events:none;
   }
+  /* 結果画面：上から下へ展開して表示 */
+  #screen-result.active{
+    animation:resultUnfold .7s cubic-bezier(.2,.7,.3,1) both;
+  }
+  @keyframes resultUnfold{
+    0%{ clip-path:inset(0 0 100% 0); transform:translateY(-8px); }
+    100%{ clip-path:inset(0 0 0 0); transform:translateY(0); }
+  }
   .result-emoji{
     font-size:3.4em;
     text-align:center;
