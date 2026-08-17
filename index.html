@@ -1171,13 +1171,13 @@
   /* ===== 結果：レシート機械の排出口からレシートが出てくる演出 ===== */
   .receipt-machine{
     position:relative;
-    z-index:2;
+    z-index:1;
     text-align:center;
     margin:-6px 0 0;
   }
   .receipt-machine-img{
-    width:300px;
-    max-width:82%;
+    width:330px;
+    max-width:86%;
     height:auto;
     display:inline-block;
     filter:drop-shadow(0 6px 14px rgba(0,0,0,0.22));
@@ -1194,14 +1194,14 @@
   }
   .receipt-paper{
     position:relative;
-    z-index:1;
-    width:300px;
-    max-width:82%;
-    margin:-14px auto 16px;
+    z-index:2;
+    width:224px;
+    max-width:60%;
+    margin:0 auto 16px;      /* marginTop はJSで排出口位置に合わせる */
     background:#ffffff;
     border:1px solid #e6e0d4;
-    box-shadow:0 12px 22px rgba(0,0,0,0.28);
-    padding:22px 18px 18px;
+    box-shadow:0 10px 20px rgba(0,0,0,0.3);
+    padding:20px 15px 16px;
     /* 排出口から一定速度で送り出される */
     animation:printFeed 1.7s linear .6s both, paperSettle .35s ease-out 2.3s both;
     transform-origin:top center;
@@ -1970,7 +1970,7 @@
 
   <div class="screen" id="screen-result">
     <div class="receipt-machine">
-      <img src="machine_slot3.png" class="receipt-machine-img" alt="診断結果">
+      <img src="machine_full.png" class="receipt-machine-img" id="receipt-machine-img" alt="診断結果">
     </div>
     <div class="receipt-paper" id="receipt-paper">
       <div class="result-emoji" id="result-emoji"></div>
@@ -2419,7 +2419,28 @@ function showResult(){
   });
 
   show("screen-result");
+  positionReceiptAtSlot();
 }
+
+// レシートの上端をマシン画像の排出口（約57%）に合わせて配置
+const SLOT_FRAC = 0.575; // 排出口下端の高さ（マシン画像に対する割合）
+function positionReceiptAtSlot(){
+  const mImg = document.getElementById("receipt-machine-img");
+  const paper = document.getElementById("receipt-paper");
+  if(!mImg || !paper) return;
+  const apply = ()=>{
+    const mh = mImg.getBoundingClientRect().height;
+    if(!mh) return;
+    paper.style.marginTop = (-(mh * (1 - SLOT_FRAC))) + "px";
+  };
+  if(mImg.complete && mImg.naturalHeight) apply();
+  else mImg.addEventListener("load", apply, { once:true });
+  // レイアウト確定後にも再計算
+  requestAnimationFrame(apply);
+}
+window.addEventListener("resize", ()=>{
+  if(document.getElementById("screen-result").classList.contains("active")) positionReceiptAtSlot();
+});
 
 function restartQuiz(){
   show("screen-intro");
