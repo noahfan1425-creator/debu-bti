@@ -80,6 +80,40 @@
     text-shadow:1px 2px 4px rgba(0,0,0,0.6);
     animation:kioskPulse 1.3s ease-in-out infinite;
   }
+  /* 開発用パネル（画面ジャンプ） */
+  #devpanel{
+    position:fixed;
+    left:10px; bottom:10px;
+    z-index:90;
+    display:none;
+    flex-direction:column;
+    gap:4px;
+    background:rgba(20,20,24,0.9);
+    border:1px solid #444;
+    border-radius:8px;
+    padding:8px;
+    box-shadow:0 4px 14px rgba(0,0,0,0.4);
+  }
+  body.dev #devpanel{ display:flex; }
+  #devpanel .dev-title{
+    color:#8fe;
+    font-size:0.62em;
+    font-weight:800;
+    letter-spacing:1px;
+    margin-bottom:2px;
+  }
+  #devpanel button{
+    font-size:0.72em;
+    font-weight:700;
+    padding:5px 10px;
+    border:none;
+    border-radius:5px;
+    background:#eee;
+    color:#222;
+    cursor:pointer;
+    text-align:left;
+  }
+  #devpanel button:hover{ background:#ffce00; }
   #bgm-toggle{
     position:fixed;
     top:12px; right:12px;
@@ -1959,6 +1993,16 @@
 
 </div>
 
+<div id="devpanel" aria-hidden="true">
+  <span class="dev-title">DEV（`で切替）</span>
+  <button onclick="devGo('title')">タイトル</button>
+  <button onclick="devGo('intro')">開始画面</button>
+  <button onclick="devGo('quiz')">診断</button>
+  <button onclick="devGo('result')">結果</button>
+  <button onclick="devGo('categories')">4分類</button>
+  <button onclick="devGo('alltypes')">16一覧</button>
+</div>
+
 <div id="type-modal" class="type-modal" onclick="if(event.target===this)closeTypeModal()">
   <div class="type-modal-card">
     <button class="tm-close" onclick="closeTypeModal()" aria-label="閉じる">✕</button>
@@ -2460,6 +2504,26 @@ function show(id){
   if(fullscreen2d) fullscreen2d.classList.toggle("active", id === "screen-title");
   bgmForScreen(id);
 }
+
+// ===== 開発用：任意の画面へ即ジャンプ =====
+function devGo(t){
+  const g = document.getElementById("start-gate");
+  if(g) g.style.display = "none";
+  closeTypeModal && document.getElementById("type-modal").classList.remove("show");
+  if(t === "quiz"){ startQuiz(); }
+  else if(t === "result"){ scores = {M:8,L:2,S:7,N:3,G:8,B:2,P:7,I:3}; showResult(); }
+  else if(t === "categories"){ showCategories(); }
+  else if(t === "alltypes"){ showAllTypes(); }
+  else { show("screen-" + t); }
+}
+// バッククォート「`」キーでパネルの表示/非表示を切替。?dev でも表示。
+window.addEventListener("keydown", (e)=>{
+  const tag = (e.target && e.target.tagName || "").toLowerCase();
+  if(e.key === "`" && tag !== "input" && tag !== "textarea"){
+    document.body.classList.toggle("dev");
+  }
+});
+document.body.classList.add("dev"); // 開発中はデフォルト表示
 </script>
 </body>
 </html>
