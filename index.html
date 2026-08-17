@@ -1226,11 +1226,12 @@
   }
   /* 結果画面：上から下へ展開して表示 */
   #screen-result.active{
-    animation:resultUnfold 1.4s cubic-bezier(.2,.7,.3,1) both;
+    /* レシートが送り出されるように、一定速度で上から下へ */
+    animation:resultUnfold 2.2s linear both;
   }
   @keyframes resultUnfold{
-    0%{ clip-path:inset(0 0 100% 0); transform:translateY(-8px); }
-    100%{ clip-path:inset(0 0 0 0); transform:translateY(0); }
+    0%{ clip-path:inset(0 0 100% 0); }
+    100%{ clip-path:inset(0 0 0 0); }
   }
   .result-emoji{
     font-size:3.4em;
