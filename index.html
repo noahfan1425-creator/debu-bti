@@ -1224,15 +1224,14 @@
     background:linear-gradient(180deg, rgba(0,0,0,0.08), transparent);
     pointer-events:none;
   }
-  /* 結果画面：上から下へ展開して表示 */
-  #screen-result.active{
-    /* レシートが送り出されるように、一定速度で上から下へ */
-    animation:resultUnfold 2.2s linear both;
+  /* 結果画面：文字が打ち込まれるタイプライター演出のカーソル */
+  .tw-caret::after{
+    content:"▌";
+    margin-left:1px;
+    opacity:.85;
+    animation:twCaret .6s step-end infinite;
   }
-  @keyframes resultUnfold{
-    0%{ clip-path:inset(0 0 100% 0); }
-    100%{ clip-path:inset(0 0 0 0); }
-  }
+  @keyframes twCaret{ 50%{ opacity:0; } }
   .result-emoji{
     font-size:3.4em;
     text-align:center;
@@ -2386,6 +2385,34 @@ function answer(q, opt){
   }
 }
 
+// 文字を順番に打ち込むタイプライター演出
+let _twToken = 0;
+function typeSequence(steps){
+  const token = ++_twToken;
+  let i = 0;
+  function step(){
+    if(token !== _twToken) return;
+    if(i >= steps.length) return;
+    const el = steps[i].el, text = steps[i].text || "";
+    el.textContent = "";
+    el.classList.add("tw-caret");
+    let c = 0;
+    const perTick = text.length > 36 ? 2 : 1;   // 長文は少し速く
+    const iv = setInterval(()=>{
+      if(token !== _twToken){ clearInterval(iv); return; }
+      c += perTick;
+      el.textContent = text.slice(0, c);
+      if(c >= text.length){
+        clearInterval(iv);
+        el.classList.remove("tw-caret");
+        i++;
+        setTimeout(step, 140);   // 次の行までの間
+      }
+    }, 24);
+  }
+  step();
+}
+
 function showResult(){
   const code = (scores.M>=scores.L?"M":"L") +
                (scores.S>=scores.N?"S":"N") +
@@ -2393,17 +2420,16 @@ function showResult(){
                (scores.P>=scores.I?"P":"I");
   const t = types[code];
   document.getElementById("result-emoji").textContent = t.emoji;
-  document.getElementById("result-code").textContent = "デブBTI: " + code;
-  document.getElementById("result-name").textContent = t.name;
-  document.getElementById("result-catch").textContent = "「" + t.catch + "」";
-  document.getElementById("result-desc").textContent = t.desc;
-  document.getElementById("result-food-name").textContent = t.food;
-  document.getElementById("result-food-reason").textContent = t.reason;
+  document.getElementById("result-food-name").textContent = "";
+  document.getElementById("result-food-reason").textContent = "";
 
+  // good/bad は空の<li>を用意し、後で1行ずつ打ち込む
   const goodEl = document.getElementById("result-good");
-  goodEl.innerHTML = t.good.map(li=>`<li>${li}</li>`).join("");
+  goodEl.innerHTML = "";
+  const goodSteps = t.good.map(txt=>{ const li=document.createElement("li"); goodEl.appendChild(li); return {el:li, text:txt}; });
   const badEl = document.getElementById("result-bad");
-  badEl.innerHTML = t.bad.map(li=>`<li>${li}</li>`).join("");
+  badEl.innerHTML = "";
+  const badSteps = t.bad.map(txt=>{ const li=document.createElement("li"); badEl.appendChild(li); return {el:li, text:txt}; });
 
   const barsEl = document.getElementById("axis-bars");
   barsEl.innerHTML = "";
@@ -2422,7 +2448,21 @@ function showResult(){
     barsEl.appendChild(row);
   });
 
+  // 打ち込む順番（上から下へ）
+  const steps = [
+    {el:document.getElementById("result-code"), text:"デブBTI: " + code},
+    {el:document.getElementById("result-name"), text:t.name},
+    {el:document.getElementById("result-catch"), text:"「" + t.catch + "」"},
+    {el:document.getElementById("result-desc"), text:t.desc},
+    ...goodSteps,
+    ...badSteps,
+    {el:document.getElementById("result-food-name"), text:t.food},
+    {el:document.getElementById("result-food-reason"), text:t.reason},
+  ];
+  steps.forEach(s=>{ s.el.textContent = ""; });
+
   show("screen-result");
+  typeSequence(steps);
 }
 
 function restartQuiz(){
