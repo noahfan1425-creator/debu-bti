@@ -6,7 +6,7 @@
 <title>デブBTI - あなたはどんなタイプのデブ？</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Yusei+Magic&family=Mochiy+Pop+One&family=M+PLUS+Rounded+1c:wght@500;700;800&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Yusei+Magic&family=Mochiy+Pop+One&family=M+PLUS+Rounded+1c:wght@500;700;800&family=Courier+Prime:wght@400;700&family=DotGothic16&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg1:#ff6fa5;
@@ -32,6 +32,56 @@
     color:var(--text);
     position:relative;
     overflow-x:hidden;
+  }
+  /* ===== 診断結果前のロード画面（モニター風・ドット文字） ===== */
+  #loading-overlay{
+    position:fixed; inset:0;
+    z-index:80;
+    display:none;
+    background:radial-gradient(120% 120% at 50% 40%, #0c2a17 0%, #061810 60%, #030b07 100%);
+    color:#39ff9c;
+    overflow:hidden;
+  }
+  #loading-overlay.show{ display:block; }
+  /* 走査線 */
+  #loading-overlay::before{
+    content:"";
+    position:absolute; inset:0;
+    background:repeating-linear-gradient(0deg, rgba(0,0,0,0.28) 0 2px, transparent 2px 4px);
+    pointer-events:none;
+    animation:monFlicker 3s steps(60) infinite;
+  }
+  @keyframes monFlicker{ 0%,100%{opacity:.5;} 50%{opacity:.75;} }
+  .mon-brand{
+    position:absolute;
+    top:26px; left:30px;
+    font-family:"DotGothic16",monospace;
+    font-size:1.6em;
+    letter-spacing:2px;
+    color:#39ff9c;
+    text-shadow:0 0 8px rgba(57,255,156,0.7);
+  }
+  .mon-center{
+    position:absolute; inset:0;
+    display:flex; align-items:center; justify-content:center;
+    font-family:"DotGothic16",monospace;
+    font-size:2em;
+    letter-spacing:3px;
+    color:#39ff9c;
+    text-shadow:0 0 10px rgba(57,255,156,0.8);
+    text-align:center;
+    padding:0 16px;
+  }
+  .mon-dots::after{
+    content:"";
+    animation:monDots 1.2s steps(1) infinite;
+  }
+  @keyframes monDots{
+    0%{ content:""; }
+    25%{ content:"."; }
+    50%{ content:".."; }
+    75%{ content:"..."; }
+    100%{ content:""; }
   }
   #start-gate{
     position:fixed; inset:0;
@@ -1846,6 +1896,10 @@
     <div class="sg-hint">🔊 タップしてスタート</div>
   </div>
 </div>
+<div id="loading-overlay" aria-hidden="true">
+  <div class="mon-brand">デブBTI</div>
+  <div class="mon-center">making your order<span class="mon-dots"></span></div>
+</div>
 <div id="flash-overlay" aria-hidden="true"></div>
 <div class="interior-bg" aria-hidden="true">
   <div class="interior-stage">
@@ -2379,10 +2433,20 @@ function answer(q, opt){
   current++;
   if(current >= questions.length){
     document.getElementById("progress-bar").style.width = "100%";
-    setTimeout(showResult, 350);
+    setTimeout(showLoadingThenResult, 350);
   } else {
     setTimeout(renderQuestion, 250);
   }
+}
+
+// 診断結果の前にモニター風ロード画面を挟む
+function showLoadingThenResult(){
+  const ov = document.getElementById("loading-overlay");
+  ov.classList.add("show");
+  setTimeout(()=>{
+    ov.classList.remove("show");
+    showResult();
+  }, 2600);
 }
 
 // 文字を順番に打ち込むタイプライター演出
