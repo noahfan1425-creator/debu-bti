@@ -2638,7 +2638,7 @@ function devGo(t){
   if(g) g.style.display = "none";
   closeTypeModal && document.getElementById("type-modal").classList.remove("show");
   if(t === "quiz"){ startQuiz(); }
-  else if(t === "result"){ scores = {M:8,L:2,S:7,N:3,G:8,B:2,P:7,I:3}; showResult(); }
+  else if(t === "result"){ scores = {M:8,L:2,S:7,N:3,G:8,B:2,P:7,I:3}; showLoadingThenResult(); }
   else if(t === "categories"){ showCategories(); }
   else if(t === "alltypes"){ showAllTypes(); }
   else { show("screen-" + t); }
