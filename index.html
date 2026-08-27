@@ -1409,7 +1409,9 @@
   }
   .axis-row .axis-fill{
     height:100%;
+    width:0;
     background:linear-gradient(90deg,var(--accent2),var(--accent3));
+    transition:width .9s cubic-bezier(.25,.9,.3,1);
   }
   button.secondary{
     display:block;
@@ -2457,12 +2459,12 @@ function showLoadingThenResult(){
 
 // 文字を順番に打ち込むタイプライター演出
 let _twToken = 0;
-function typeSequence(steps){
+function typeSequence(steps, onDone){
   const token = ++_twToken;
   let i = 0;
   function step(){
     if(token !== _twToken) return;
-    if(i >= steps.length) return;
+    if(i >= steps.length){ if(onDone) onDone(); return; }
     const el = steps[i].el, text = steps[i].text || "";
     el.textContent = "";
     el.classList.add("tw-caret");
@@ -2512,7 +2514,7 @@ function showResult(){
     row.className = "axis-row";
     row.innerHTML = `
       <div class="axis-label">${info.label} ${info.a}/${info.b}</div>
-      <div class="axis-track"><div class="axis-fill" style="width:${pct}%"></div></div>
+      <div class="axis-track"><div class="axis-fill" data-pct="${pct}" style="width:0"></div></div>
       <div style="width:38px;text-align:right;">${aVal}-${bVal}</div>
     `;
     barsEl.appendChild(row);
@@ -2532,7 +2534,14 @@ function showResult(){
   steps.forEach(s=>{ s.el.textContent = ""; });
 
   show("screen-result");
-  typeSequence(steps);
+  // タイピング完了後にゲージを伸ばす
+  typeSequence(steps, ()=>{
+    setTimeout(()=>{
+      document.querySelectorAll("#axis-bars .axis-fill").forEach(f=>{
+        f.style.width = (f.dataset.pct || 0) + "%";
+      });
+    }, 200);
+  });
 }
 
 function restartQuiz(){
